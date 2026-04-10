@@ -13,6 +13,19 @@ function (num, task)
 最终函数需要返回一个 Promise，并且返回结果要按照任务原本的顺序进行排列。
 */
 
+/*
+Promise使用
+ .then —— 当前的任务，成功时执行
+ .catch —— 当前的任务，失败时执行，整个任务直接失败，不再继续
+ .finally —— 不管成功失败都要做的事：腾出一个位置（count--）， 再添加新的（run）
+*/
+
+/**
+ * @param {number} num
+ * @param {Function[]} tasks
+ * @return {Promise}
+ */
+
 // 思路：并发池模型 + queue队列
 // 并发池： 控制当前正在执行的任务数量 count，保证同时最多只有 num 个任务在执行
 //         每当有任务完成，就从队列里再取一个任务补上，直到所有任务执行完
@@ -51,15 +64,37 @@ function runTasksWithLimit(num, tasks) {
                 })
                 // 任意一个任务失败，直接 reject 整个 Promise
                 .catch(reject)
+                // 补任务：从任务队列里取一个任务补上
                 .finally(() => {
-                    count--;
-                    run();
+                    count--;  // 个任务执行完了， 并发数减少
+                    run();    // 调用 run() 👉 补一个新任务进来
                 })
         }
       }
 
-      // 执行任务
+      // 启动调度器
       run();
     });
   }
-  
+
+/* 
+        开始
+        ↓
+        调用 run()
+        ↓
+        while (并发没满 && 还有任务)
+        ├── 取一个任务（index++）
+        ├── 并发数 +1（count++）
+        ├── 执行 task()
+        │     ├── 成功 → then（存结果）
+        │     ├── 失败 → catch（报错）
+        │     └── 最终 → finally
+        │            ├── count--
+        │            └── 再调用 run()（补任务）
+        ↓
+        所有任务发完 && count = 0
+        ↓
+        resolve(results)
+        ↓
+        结束
+*/
