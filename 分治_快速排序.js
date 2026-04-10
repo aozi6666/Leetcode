@@ -5,8 +5,7 @@ function quickSort(arr) {
     // 初始化-中枢按钮:基准值
     const pivot = arr[0];
     // 初始化-左右区间
-    const left = [];
-    const right = [];
+    const left = [];   const right = [];
 
     // 遍历-分区
     for(let i = 1; i < arr.length; i++){
