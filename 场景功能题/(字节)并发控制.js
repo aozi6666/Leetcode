@@ -23,35 +23,42 @@ function runTasksWithLimit(num, tasks) {
       let index = 0;  // 当前执行任务的索引
       let count = 0;  // 当前 正在执行的任务数（控制并发）
 
-      
-      
-  
+      // 任务调度函数：不断往 执行池 里添加任务
+
       function run() {
-        // 所有任务完成
-        if (index === tasks.length && count === 0) {
-          resolve(results);
-          return;
+        // 结束条件： 所有任务都执行完，且执行池为空
+        if( index === tasks.length && count === 0) {
+            resolve(results);  // 将结果 resolve 出去
+            return;
         }
-  
-        // 控制并发数
-        while (count < num && index < tasks.length) {
-          const currentIndex = index;
-          const task = tasks[index];
-          index++;
-          count++;
-  
-          task()
-            .then((res) => {
-              results[currentIndex] = res;
-            })
-            .catch(reject)
-            .finally(() => {
-              count--;
-              run(); // 继续补任务
-            });
+
+        // 控制并发(并发没满，就不断往里面加任务)
+        // 循环条件：执行任务count数，没超过并发上限 && 索引没超过任务数组长度
+        while(count < num && index < tasks.length) {
+            // 保存任务位置（用于保证后续结果顺序）
+            const taskIndex = index;
+            const task = tasks[index];
+
+            index++;  // 取下一个任务
+            count++;  // 当前执行任务的并发数 +1
+
+            // 开始执行任务：处理 Promise
+            task()
+                // 执行任务
+                .then((res) => {
+                    // 把结果 按原顺序 存到 results
+                    results[taskIndex] = res;
+                })
+                // 任意一个任务失败，直接 reject 整个 Promise
+                .catch(reject)
+                .finally(() => {
+                    count--;
+                    run();
+                })
         }
       }
-  
+
+      // 执行任务
       run();
     });
   }
