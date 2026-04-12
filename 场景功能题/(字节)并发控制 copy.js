@@ -29,53 +29,47 @@ Promise使用
 // 思路：并发池模型 + queue队列
 // 并发池： 控制当前正在执行的任务数量 count，保证同时最多只有 num 个任务在执行
 //         每当有任务完成，就从队列里再取一个任务补上，直到所有任务执行完
-function runTasksWithLimit(num, tasks) {
+function runTasksWithLimit(tasks, nums){
     return new Promise((resolve, reject) => {
-      // 初始化
-      const results = [];  // 结果数组(按顺序存)
-      let index = 0;  // 当前执行任务的索引
-      let count = 0;  // 当前 正在执行的任务数（控制并发）
+        // 初始化
+        const reslut = 0;  // 结果数组
+        let count = 0;  // 正在执行的任务数量
+        let index = 0;  // 当前正在执行的任务索引
 
-      // 任务调度函数：不断往 执行池 里添加任务
-
-      function run() {
-        // 结束条件： 所有任务都执行完，且执行池为空
-        if( index === tasks.length && count === 0) {
-            resolve(results);  // 将结果 resolve 出去
+        // 并发池-执行函数
+        function run(){
+          // 结束条件
+          if(index === tasks.length && count === 0){
+            resolve(reslut);
             return;
-        }
+          }
 
-        // 控制并发(并发没满，就不断往里面加任务)
-        // 循环条件：执行任务count数，没超过并发上限 && 索引没超过任务数组长度
-        while(count < num && index < tasks.length) {
+          // 循环 并发池 取任务执行
+          while(count <= nums && index < tasks.length ){
             // 保存任务位置（用于保证后续结果顺序）
             const taskIndex = index;
             const task = tasks[index];
 
-            index++;  // 取下一个任务
-            count++;  // 当前执行任务的并发数 +1
+            // 取下一个任务
+            index++;
+            count++;
 
-            // 开始执行任务：处理 Promise
             task()
-                // 执行任务
-                .then((res) => {
-                    // 把结果 按原顺序 存到 results
-                    results[taskIndex] = res;
-                })
-                // 任意一个任务失败，直接 reject 整个 Promise
-                .catch(reject)
-                // 补任务：从任务队列里取一个任务补上
-                .finally(() => {
-                    count--;  // 个任务执行完了， 并发数减少
-                    run();    // 调用 run() 👉 补一个新任务进来
-                })
+              .then((res) => {
+                reslut[taskIndex] = res;
+              })
+              .catch(reject)
+              .finally(() => {
+                count--;
+                run();
+              })
+          }
         }
-      }
 
-      // 启动调度器
-      run();
-    });
-  }
+        // 执行并发池函数
+        run();
+    })
+}
 
 /* 
         开始
