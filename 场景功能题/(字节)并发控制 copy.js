@@ -1,16 +1,29 @@
 /* ‘
-function (num, task)
+【题目描述】实现一个 SuperTask 类，用来控制异步任务的并发执行数量。
 
- - num：最大并发数
- - task：一组异步任务（通常是返回 Promise 的函数数组）
+要求：
+创建实例时可以传入 最大并发数 poolSize。
+通过 add(task) 方法 添加异步任务，
+ - 同一时刻最多只能有 poolSize 个任务同时执行。
+ - 当某个任务执行完成后，需要自动从 等待队列queue 中取出下一个任务继续执行
 
-现在有一个函数，接收两个参数：第一个参数是最大并发数 num，
-第二个参数是一个任务数组 tasks，数组中的每一项都是一个返回 Promise 的函数。
+add(task) 需要返回一个 Promise，调用方 可以拿到 当前任务的执行结果
 
-要求你实现这个函数，使得这些任务在执行时，同一时间最多只能有 num 个任务在并发执行。
-当某一个任务执行完成后，需要立刻从任务队列中取下一个任务补上继续执行，直到所有任务都执行完成。
+【输入参数】
+constructor(options)
+options.poolSize：数字 Number 类型，表示最大并发数
+add(task) task：一个函数function
 
-最终函数需要返回一个 Promise，并且返回结果要按照任务原本的顺序进行排列。
+调用 task() 后需要返回 Promise
+
+【输出】
+add(task) 的返回值 ： 返回一个 Promise
+
+- task 成功时，返回该任务的结果
+- task 失败时，返回错误
+
+整体行为
+所有任务按 添加顺序 进入队列 -> 任务执行顺序受并发数限制 -> 同时运行中的任务数不能超过 poolSize
 */
 
 /*
@@ -29,47 +42,54 @@ Promise使用
 // 思路：并发池模型 + queue队列
 // 并发池： 控制当前正在执行的任务数量 count，保证同时最多只有 num 个任务在执行
 //         每当有任务完成，就从队列里再取一个任务补上，直到所有任务执行完
-function runTasksWithLimit(tasks, nums){
+class SuperTask {
+  // 构造器函数：创建实例，传入最大并发数 poolSize
+  constructor(options) {
+    this.poolSize = options.poolSize; // 最大并发数
+    this.queue = [];                  // 任务队列
+    this.runningCount = 0;            // 当前执行中的任务数
+  }
+
+  // 添加任务回调
+  add(task) {
     return new Promise((resolve, reject) => {
-        // 初始化
-        const reslut = 0;  // 结果数组
-        let count = 0;  // 正在执行的任务数量
-        let index = 0;  // 当前正在执行的任务索引
+      // 添加到等待队列
+      this.queue.push({ task, resolve, reject });
 
-        // 并发池-执行函数
-        function run(){
-          // 结束条件
-          if(index === tasks.length && count === 0){
-            resolve(reslut);
-            return;
-          }
+      // 尝试调度任务
+      this.run();
+    });
+  }
 
-          // 循环 并发池 取任务执行
-          while(count <= nums && index < tasks.length ){
-            // 保存任务位置（用于保证后续结果顺序）
-            const taskIndex = index;
-            const task = tasks[index];
+  // 调度任务
+  run() {
+    // 并发没满 + 队列中还有任务
+    while (this.runningCount < this.poolSize && this.queue.length > 0) {
+      // 取一个任务
+      const { task, resolve, reject } = this.queue.shift();
 
-            // 取下一个任务
-            index++;
-            count++;
+      // 并发数 +1
+      this.runningCount++;
 
-            task()
-              .then((res) => {
-                reslut[taskIndex] = res;
-              })
-              .catch(reject)
-              .finally(() => {
-                count--;
-                run();
-              })
-          }
-        }
+      // 执行任务
+      Promise.resolve(task())
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => {
+          reject(err);
+        })
+        .finally(() => {
+          // 当前任务执行结束，释放一个并发位置
+          this.runningCount--;
 
-        // 执行并发池函数
-        run();
-    })
+          // 继续补任务
+          this.run();
+        });
+    }
+  }
 }
+
 
 /* 
         开始

@@ -46,7 +46,7 @@ function runTasksWithLimit(num, tasks) {
         }
 
         // 控制并发(并发没满，就不断往里面加任务)
-        // 循环条件：执行任务count数，没超过并发上限 && 索引没超过任务数组长度
+        // 循环条件：执行任务count数，没超过并发上限（<num） && 索引没超过任务数组长度
         while(count < num && index < tasks.length) {
             // 保存任务位置（用于保证后续结果顺序）
             const taskIndex = index;
