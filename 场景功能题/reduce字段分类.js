@@ -13,8 +13,8 @@ const dataList = [
     { name: 'dd', country: 'EN' }
 ];
 
-function reduceSort(arr){
-   return arr.reduce(function(acc, cur){
+function reduceSort(list){
+   return list.reduce(function(acc, cur){
       // 取出 当前项的 country 值
       const country = cur.country;
 
@@ -26,5 +26,8 @@ function reduceSort(arr){
       // 把当前项 push 到 country 值对应的数组中
       acc[country].push(cur);
 
+      return acc;
    }, {})
 }
+
+console.log(reduceSort(dataList));
