@@ -92,23 +92,85 @@ class SuperTask {
 
 
 /* 
-        开始
+      开始
         ↓
-        调用 run()
+      创建实例：new SuperTask({ poolSize: 2 })
         ↓
-        while (并发没满 && 还有任务)
-        ├── 取一个任务（index++）
-        ├── 并发数 +1（count++）
-        ├── 执行 task()
-        │     ├── 成功 → then（存结果）
-        │     ├── 失败 → catch（报错）
-        │     └── 最终 → finally
-        │            ├── count--
-        │            └── 再调用 run()（补任务）
+      初始化
+        ├── this.poolSize = 2
+        ├── this.queue = []
+        └── this.runningCount = 0
         ↓
-        所有任务发完 && count = 0
+      调用 add(task)
         ↓
-        resolve(results)
+      返回一个 Promise
         ↓
-        结束
+      把任务放入等待队列
+        └── this.queue.push({ task, resolve, reject })
+        ↓
+      调用 this.run()
+        ↓
+      while (this.runningCount < this.poolSize && this.queue.length > 0)
+        ├── 从队列头部取出一个任务
+        │     └── const { task, resolve, reject } = this.queue.shift()
+        │
+        ├── 当前执行数 +1
+        │     └── this.runningCount++
+        │
+        ├── 执行任务
+        │     └── Promise.resolve(task())
+        │            ├── 成功 → then(res)
+        │            │         └── resolve(res)
+        │            │
+        │            ├── 失败 → catch(err)
+        │            │         └── reject(err)
+        │            │
+        │            └── 最终 → finally()
+        │                      ├── this.runningCount--
+        │                      └── 再次调用 this.run()
+        │                            （补下一个任务）
+        │
+        └── 继续 while 判断
+              ├── 如果并发没满并且队列还有任务 → 继续取任务执行
+              └── 否则 → 暂时退出 run()
+        ↓
+      某个任务完成
+        ↓
+      finally 中释放一个并发位置
+        ↓
+      再次调用 this.run()
+        ↓
+      如果队列还有任务，就继续补任务
+        ↓
+      直到队列为空，并且没有任务在执行
+        ↓
+      所有任务执行完成
+        ↓
+      结束
+
 */
+// 使用案例
+async function timeout(time) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, time);
+  });
+}
+
+const superTask = new SuperTask({ poolSize: 2 });
+
+function addTask(time, name) {
+  const label = `任务${name}`;
+  console.time(label);
+
+  superTask.add(() => timeout(time)).then(() => {
+    console.timeEnd(label);
+  });
+}
+
+addTask(10000, 1);
+addTask(5000, 2);
+addTask(3000, 3);
+addTask(4000, 4);
+addTask(5000, 5);
