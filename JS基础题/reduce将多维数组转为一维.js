@@ -10,18 +10,19 @@
 */ 
 
  // 多维数组
-const arr = [1, [2, [3, 4]], 5];
-function reduceFlatten(arr){
-    return arr.reduce(function(acc, cur){
-        if(Array.isArray(cur)){
-            // 如果当前项还是数组，就递归
-            return acc.concat(reduceFlatten(cur));
-        }
+function flatten(arr){
+    const arr = [1, [2, [3, 4]], 5];
+    const result = function reduceFlatten(arr){
+        return arr.reduce(function(acc, cur){
+            if(Array.isArray(cur)){
+                // 如果当前项还是数组，就递归
+                return acc.concat(reduceFlatten(cur));
+            }
 
-        // 如果当前项不是数组，就直接返回
-        return acc.concat(cur);
-    }, []);
-    
+            // 如果当前项不是数组，就直接返回
+            return acc.concat(cur);
+        }, []);
+    }
+
+    console.log(result); 
 }
-
-console.log(reduceFlatten(arr));

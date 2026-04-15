@@ -8,6 +8,12 @@
 
 const str = 'hello world';
 
+// 方法1：使用 split
+function splitReverse(str){
+    return str.split('').reverse().join('');
+}
+
+// 方法2：使用 reduce
 function reduceReverse(str){
     // 字符串转数组
     strArr = Array.from(str);
