@@ -38,7 +38,7 @@ test();
 function myMap(arr, fn){
     // 处理回调
     function callback(acc, cur, index, array){
-        // 处理每一项,算出新值
+        // 处理每一项,算出新值。当前项经过 fn 处理
         const mappedValue = fn(cur, index, array);
         // 新值结果添加到新数组中
         acc.push(mappedValue);
