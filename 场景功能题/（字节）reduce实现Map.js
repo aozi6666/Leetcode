@@ -17,14 +17,16 @@
     - index：当前项下标
     - array：原数组
 */
-const arr = [10, 20, 30];
+function test(){
+    const arr = [10, 20, 30];
 
-const result = arr.reduce(function(acc, cur, index, array) {
-  console.log('acc:', acc);
-  console.log('cur:', cur);
-  console.log('index:', index);
-  console.log('array:', array);
-  return acc + cur;
-}, 0);
-
-console.log(result);
+    const result = arr.reduce(function(acc, cur, index, array) {
+      console.log('acc:', acc);
+      console.log('cur:', cur);
+      console.log('index:', index);
+      console.log('array:', array);
+      return acc + cur;
+    }, 0);
+    
+    console.log(result); 
+}
