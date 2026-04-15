@@ -34,9 +34,46 @@ var compareVersion = function(version1, version2) {
 };
 
 // 方法二：双指针(不可以用split方法)
+// ASCII 码 0 的 码值是 48
 var compareVersion = function(version1, version2) {
-    
-};
+    let i = 0;
+    let j = 0;
+    const m = version1.length;
+    const n = version2.length;
+  
+    // 循环比较
+    while (i < m || j < n) {
+      // 每次遇到 . 时，进入循环时要初始化，再比较
+      let num1 = 0;
+      let num2 = 0;
+  
+      while (i < m && version1[i] !== '.') {
+        // 把字符串数字转成整数
+        // version1.charCodeAt(i) 得到 字符串的 ASCII 码
+        // version1.charCodeAt(i) - 48 得到 字符串的数字
+        num1 = num1 * 10 + (version1.charCodeAt(i) - 48);
+        i++;
+      }
+  
+      while (j < n && version2[j] !== '.') {
+        num2 = num2 * 10 + (version2.charCodeAt(j) - 48);
+        j++;
+      }
+  
+      if (num1 > num2) return 1;
+      if (num1 < num2) return -1;
+      
+      // 相同时，继续比较 下一组 . 之后的字符串
+      if(num1 === num2) {
+        // i 和 j 都后移一位
+        i++;
+        j++;
+      }
+    }
+  
+    return 0;
+  };
+  
 // @lc code=end
 
 
