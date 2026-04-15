@@ -9,7 +9,8 @@
     - reduce 回调的四个参数: 
 
     arr.reduce(function(acc, cur, index, array) {
-            ...返回值
+            ...每一轮怎么处理
+            return acc;
     }, 初始值)
 
     - acc：累计器
