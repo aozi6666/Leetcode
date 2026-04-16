@@ -5,105 +5,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>watermarkCanvas</title>
     <style>
-      /* 页面只是为了演示效果 */
       body {
         margin: 0;
         padding: 40px;
         font-family: Arial, "Microsoft YaHei", sans-serif;
         background-color: #f5f5f5;
       }
-  
+
       /* 需要添加水印的目标区域 */
-      #watermark-container {
+      #contain {
         position: relative;
         width: 400px;
         height: 260px;
         margin: 0 auto;
         padding: 20px;
         box-sizing: border-box;
-        background-color: #4a90e2;
+        background-color: skyblue;
         color: #fff;
-        border-radius: 8px;
         overflow: hidden;
-      }
-  
-      .content {
-        position: relative;
-        z-index: 1;
-      }
-  
-      .content h2 {
-        margin-top: 0;
       }
     </style>
   </head>
   <body>
     <div id="contain">
-      <div class="content">
-        水印展示
-      </div>
+      水印展示
     </div>
+
     <script>
-      function addWatermark(options){
+       /**
+       * 给指定元素添加文字水印
+       * @param {Object} options - 配置项
+       * @param {string} options.elementId - 目标元素 id
+       * @param {string} options.watermarkText - 水印文字
+       * @param {number} [options.canvasWidth=220] - 单个水印块宽度
+       * @param {number} [options.canvasHeight=160] - 单个水印块高度
+       * @param {string} [options.font='16px Microsoft YaHei'] - 文字样式
+       * @param {string} [options.fillStyle='rgba(255,255,255,0.18)'] - 文字颜色
+       * @param {number} [options.rotateDeg=-20] - 旋转角度（单位：度）
+       */
+      function addWatermark(options) {
         const {
           elementId,
           watermarkTest,
           width = 200,
           height = 100,
-          font = '16px Microsoft YaHei',
-          fillStyle,
+          font = "16px Microsoft YaHei",
+          fillStyle = "rgba(255,255,255,0.2)",
           rotateDeg = -25,
-        } = options
-
-        // 1. 获取目标元素
+        } = options;
+        // 1. 获取目标元素(用于后续将canvas画布加入)
         const targetElement = document.getElementById(elementId);
-        
-        // 2. 创建 canvas 画布
+        // 2. 创建 canvas 对象（JS）
         const watermarkCanvas = document.createElement('canvas');
-        // 设置 canvas 大小(单个水印块大小)
+        // 3. 设置 canvas 大小
         watermarkCanvas.width = width;
         watermarkCanvas.height = height;
 
-        // 3. 获取 2D 绘图上下文
-        // 拿到 画笔对象（在 canvas 上写字、旋转、设置颜色）
+        // 4. 获取 2D 绘图上下文(画笔对象)
         const context = watermarkCanvas.getContext('2d');
 
-        // 4. 配置文字样式
+        // 5. 配置文字样式（用画笔画）
         context.font = font;
-        context.fillStyle = fillStyle;
-        context.textAlign = 'center';
+        context.fillStyle = fillStyle;  // 设置“填充颜色”(透明程度)
+        context.textAlign = "center";
         context.textBaseline = 'middle';
 
-        // 5. 将 坐标原点 移动到 画布中心（旋转时会围绕中心旋转）
-        context.translate(width / 2, height / 2);
+        // 坐标变换部分
+        // 6. 旋转画布原点（canvas 默认坐标原点在左上角）
+        context.translate(width / 2, height / 2);  // 移动坐标原点（让文字围绕中心旋转）
+        
+        // 7. 旋转画布(字体最终旋转角度： 不是通过旋转文字而是通过 旋转坐标系 得到的)
+        const rotateRad = (rotateDeg * Math.PI) / 180;  // 旋转弧度 = 旋转角度 * Math.PI / 180
+        context.rotate(rotateRad);  // 旋转当前坐标系
+        
+        // 绘制部分
+        // 8. 在画布中心，写入文字
+        context.fillText(watermarkTest, 0 , 0);
 
-        // 6. 角度转弧度：弧度 = 角度 * Math.PI / 180
-        const rotateRad = (rotateDeg * Math.PI) / 180;
-        context.rotate(rotateRad);
+        // 将 绘制内容 转到 目标元素
+        // 9. 将 canvas 转为 base64 图片
+        const base64Url = watermarkCanvas.toDataURL("image/png");
 
-        // 7. 在画布中心，写入文字
-        context.fillText(watermarkTest, 0, 0);
-
-        // 8. 将 canvas 转成 base64 图片
-        const base64Url = watermarkCanvas.toDataURL('image/png');
-
-        // 9.设置为元素的背景图，并重复平铺
+        // 10. 设置 目标元素 背景图，并重复平铺
         targetElement.style.backgroundImage = `url(${base64Url})`;
         targetElement.style.backgroundRepeat = 'repeat';
         targetElement.style.backgroundPosition = '0 0';
-     
+
       }
 
-      // 调用函数，添加水印
       addWatermark({
-        elementId: 'contain',
-        watermarkTest: '公司名称',
+        elementId: "contain",
+        watermarkTest: "公司名称",
         width: 200,
         height: 100,
-        font: '18px 宋体',
-        fillStyle: 'rgba(255, 255, 255, 0.2)',
-        rotateDeg: -25
-      })
+        font: "18px 宋体",
+        fillStyle: "rgba(255, 255, 255, 0.25)",
+        rotateDeg: -25,
+      });
     </script>
   </body>
 </html>
