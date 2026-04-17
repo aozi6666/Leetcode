@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <hread>
+        <meta charset="UTF-8"></meta>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+        <title>Float三栏布局</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+
+            .contain {
+                width: 100%;
+            }
+
+            .left {
+                width: 200px;
+                float: left;
+
+                border: 1px solid black;
+            }
+            .right {
+                width: 200px;
+                float: right;
+
+                border: 1px solid black;
+            }
+            .center {
+                margin-left: 200px;
+                margin-right: 200px;
+            }
+        </style>
+    </hread>
+    <body>
+        <div class="contain">
+            <div class="left">左侧导航栏</div>
+            <div class="right">右侧导航栏</div>
+            <div class="center">中间主内容区</div>
+        </div>
+    </body>
+</html>
