@@ -6,7 +6,7 @@ function createDebouncedFetch(delay = 300) {
     let controller = null;
     let latestId = 0;
   
-    // 真正发请求的方法（只写 fetch 版本）
+    // 真正发请求的方法（fetch 版本）
     function fetchData(value, options = {}) {
       return fetch(`/api/search?query=${encodeURIComponent(value)}`, {
         method: "GET",
