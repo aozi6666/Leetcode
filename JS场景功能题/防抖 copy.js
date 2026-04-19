@@ -1,42 +1,57 @@
 // 创建一个“带防抖 + 竞态处理 + 中断旧请求”的搜索函数
 // fetch 请求回调
 // 两层竞态保护:  AbortController + latestId 
+import { json } from "stream/consumers";
+import AbortController from 
 function createDebouncedFetch(delay = 300) {
   let timer = null;
+  
   let controller = null;
+  let latesId = 0;
 
-  // 异步请求回调
-  function fetchData(value){
-    return fetch(`/api/search?query=${encodeURIComponent(value)}`, {
+  function fetchData(value, options = {}) {
+    fetch(`/api/search?queery=${encodeURLComponent(value)}`, {
       method: 'GET',
+      options: signal
     }).then((res) => {
-      if(!res.ok) {
-        throw new Error('Network response was not ok.')
+      if(!res.ok){
+        throw new Error("网路异常")
       }
       return res.json();
     })
   }
 
-  // 返回一个函数
-  return function search(value, onSuccess, onError){
-    // 清除上次的定时器
+  return function search(value, onSucess, onError){
     clearTimeout();
 
-    // 空值处理
+    if(controller) {
+      controller.abort();
+    }
+
+    // 空值判断
     if(!value || !value.trim()){
-      onSuccess([]);
+      onSucess([]);
       return;
     }
 
-    // 创建定时器
+    let controller = new AbortController()
+
+    // 开启定时器
     const timer = setTimeout(() => {
-      // 发请求(异步)
-      fetchData(value)
+      let id = ++latesId;
+
+      fetchData(value, {signal: controller.signal})
         .then((res) => {
-          onSuccess(res);
+          if(id === latesId) {
+            onSucess(res)
+          }
         })
         .catch((err) => {
-          console.error();
+          if(err.name !== 'AbortError'){
+            onError(err);
+          } else {
+            console.error(err);
+          }
         })
     }, delay);
   }
