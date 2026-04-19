@@ -5,51 +5,53 @@ import { json } from "stream/consumers";
 import AbortController from 
 function createDebouncedFetch(delay = 300) {
   let timer = null;
-  
   let controller = null;
-  let latesId = 0;
+  let latestId = 0;
 
-  function fetchData(value, options = {}) {
-    fetch(`/api/search?queery=${encodeURLComponent(value)}`, {
+
+  // 请求回调
+  function fetchData(value, options = {}){
+    fetch((`/api/sreach?qurey=${encodeURIComponent(value)}`), {
       method: 'GET',
-      options: signal
+      signal: options.signal
     }).then((res) => {
       if(!res.ok){
-        throw new Error("网路异常")
+        throw new Error('网络异常')
       }
-      return res.json();
+      return res.json;
     })
   }
 
-  return function search(value, onSucess, onError){
-    clearTimeout();
+  return function search(value, onSuccess, onError){
+    // 请空定时器
+    clearTimeout(timer);
 
-    if(controller) {
+    // 中断上次
+    if(controller){
       controller.abort();
     }
 
     // 空值判断
     if(!value || !value.trim()){
-      onSucess([]);
+      onSuccess([]);
       return;
-    }
+    }  
 
-    let controller = new AbortController()
+    // 创建一个控制器
+    let controller = new AbortController();
 
-    // 开启定时器
+    // 创建定时器
     const timer = setTimeout(() => {
-      let id = ++latesId;
-
-      fetchData(value, {signal: controller.signal})
+      const id = ++latestId;
+      
+      fetchData(value, signal = controller.signal)
         .then((res) => {
-          if(id === latesId) {
-            onSucess(res)
+          if(id === latestId){
+            onSuccess(res);
           }
         })
         .catch((err) => {
           if(err.name !== 'AbortError'){
-            onError(err);
-          } else {
             console.error(err);
           }
         })
