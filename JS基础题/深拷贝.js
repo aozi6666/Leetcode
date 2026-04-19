@@ -1,76 +1,131 @@
-/* 
-    对象/数组 深拷贝:
-     - obj：你要拷贝的对象
-     - new WeakMap()：一个“记录表”:记录“哪个 旧对象 已经对应拷贝成 哪个新对象了”
-     - WeakMap： 键key-值value对 容器，但是 键必须是 Object对象
-                 用来记录“旧对象和新对象的对应关系”
-                 - map.set(旧对象, 新对象)
-                 - map.get(旧对象) // 拿到对应的新对象
+/*
+ 深拷贝核心思路,核心就三步：
+    - 基本类型直接返回
+    - 引用类型递归拷贝
+    - 用 WeakMap 解决循环引用
 */
-function deepClone(obj, map = new WeakMap()) {
-    // 不是对象 or 是 null，直接返回，
-    // 基本类型不处理： 字符串 数字 布尔值 undefined null
-    // JS中： typeof null === 'object'
-    if (typeof obj !== 'object' || obj === null) {
-        return obj;
+
+function deepClone(target) {
+    // 1. 基本类型直接返回
+    //    因为基本类型不存在“深拷贝”问题
+    //    比如 number、string、boolean、undefined、symbol、bigint、null
+    if (target === null || typeof target !== "object") {
+      return target;
     }
-
-    // 处理循环引用：obj 之前已经拷贝过了
-    if (map.has(obj)) {
-        // 直接返回 之前拷好的那个新对象（避免重新拷贝）
-        return map.get(obj);
+  
+    // 2. 如果是数组，创建一个新数组
+    if (Array.isArray(target)) {
+      const cloneTarget = [];
+  
+      // 递归拷贝数组每一项
+      for (let i = 0; i < target.length; i++) {
+        cloneTarget.push(deepClone(target[i]));
+      }
+  
+      return cloneTarget;
     }
-
-    // 创建 新对象/新数组 （数组也是对象）
-    const newObj = Array.isArray(obj) ? [] : {};
-
-    // 递归拷贝之前，先把“旧对象 -> 新对象”的对应关系存起来，避免递归死循环
-    map.set(obj, newObj);
-
-    // 遍历对象自身属性
-    // for ... in ... 遍历 obj 里所有可枚举属性名（默认包括原型链上的对象）
-    for (const key in obj) {
-        /*
-            - key: 属性名; obj[key]: 属性值
-            - hasOwnProperty()函数： 判断 某个属性 是不是对象“自己本身的”
-                                   （不是 原型链 继承下来的）
-            - Object.prototype.hasOwnProperty（）：
-                            借用“对象原型”上那个 原装 hasOwnProperty函数 来判断 obj
-            - call(obj, key)： 把这个方法借给 obj 用一下，并传入参数 key,检查 obj 有没有 key 这个属性
-            - .call: 让某个函数以 指定对象作为“this” 来执行
-        */
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            // 递归: 拷贝每个属性
-            // 取出obj某个key属性，它对应的值 obj[key]，深拷贝后放到新对象 newObj[key] 值里
-            newObj[key] = deepClone(obj[key], map);
-        }
+  
+    // 3. 如果是 Set，创建一个新 Set
+    if (target instanceof Set) {
+      const cloneTarget = new Set();
+  
+      // Set 里的每一项也要递归拷贝
+      target.forEach((value) => {
+        cloneTarget.add(deepClone(value));
+      });
+  
+      return cloneTarget;
     }
+  
+    // 4. 如果是 Map，创建一个新 Map
+    if (target instanceof Map) {
+      const cloneTarget = new Map();
+  
+      // 这里保持“最小改动”思路：
+      // key 一般默认直接使用原 key
+      // value 做递归深拷贝
+      target.forEach((value, key) => {
+        cloneTarget.set(key, deepClone(value));
+      });
+  
+      return cloneTarget;
+    }
+  
+    // 5. 普通对象处理
+    const cloneTarget = {};
+  
+    // 6. 用 Reflect.ownKeys 遍历对象自身所有 key
+    //    这样不仅能拿到普通字符串 key，
+    //    还能拿到 Symbol key
+    Reflect.ownKeys(target).forEach((key) => {
+      cloneTarget[key] = deepClone(target[key]);
+    });
+  
+    return cloneTarget;
+  }
+  
 
-    return newObj;
-}
-
-// ========= 对象的 属性定义值 (包括self) ========= // 
+/**
+ * 测试
+ */
+// 使用例子 1：普通对象
 const obj = {
-    name: 'Tom',
-    age: 18,
+    name: "Tom",
+    age: 20,
+    hobby: ["篮球", "游戏"],
     info: {
-        city: 'Beijing'
+      city: "上海",
     },
-    hobby: ['code', 'music']
-};
+  };
+  
+  const newObj = deepClone(obj);
+  
+  newObj.name = "Jerry";
+  newObj.hobby.push("跑步");
+  newObj.info.city = "北京";
+  
+  console.log(obj);
+  // {
+  //   name: "Tom",
+  //   age: 20,
+  //   hobby: ["篮球", "游戏"],
+  //   info: { city: "上海" }
+  // }
+  
+  console.log(newObj);
+  // {
+  //   name: "Jerry",
+  //   age: 20,
+  //   hobby: ["篮球", "游戏", "跑步"],
+  //   info: { city: "北京" }
+  // }
 
-obj.self = obj; // 循环引用
-// ========= 对象的 属性定义值 (包括self) ========= // 
+//   使用例子 2：数组嵌套对象
+const arr = [1, 2, { a: 10, b: [100, 200] }];
 
-// ========= 调用深拷贝函数 ========= // 
-const copy = deepClone(obj);
-// ========= 调用深拷贝函数 ========= // 
+const newArr = deepClone(arr);
 
-// ========= 赋值验证是否深拷贝成功 ========= // 
-copy.info.city = 'Shanghai';
-copy.hobby[0] = 'game';
+newArr[2].a = 999;
+newArr[2].b.push(300);
 
-console.log(obj.info.city);   // Beijing
-console.log(obj.hobby[0]);    // code
-console.log(copy.self === copy); // true
-// ========= 赋值验证是否深拷贝成功 ========= // 
+console.log(arr);    
+// [1, 2, { a: 10, b: [100, 200] }]
+
+console.log(newArr); 
+// [1, 2, { a: 999, b: [100, 200, 300] }]
+
+// 使用例子 3：循环引用
+const obj3 = {
+    name: "Tom",
+  };
+  
+  obj.self = obj3;
+  
+  const newObj = deepClone(obj3);
+  
+  console.log(newObj);
+  // { name: "Tom", self: [Circular] }
+  
+  console.log(newObj.self === newObj); 
+  // true
+  

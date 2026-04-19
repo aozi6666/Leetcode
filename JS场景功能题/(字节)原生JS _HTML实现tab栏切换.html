@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Tab</title>
+  <style>
+    /* 当前被选中的 tab 按钮高亮 */
+    .tab-btn.active {
+      color: red;
+    }
+
+    /* 默认所有内容面板都隐藏 */
+    .tab-panel {
+      display: none;
+    }
+
+    /* 当前激活的内容面板显示 */
+    .tab-panel.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- tab 按钮区域 -->
+  <div>
+    <button class="tab-btn active">Tab1</button>
+    <button class="tab-btn">Tab2</button>
+    <button class="tab-btn">Tab3</button>
+  </div>
+
+  <!-- tab 内容区域 -->
+  <div>
+    <div class="tab-panel active">内容1</div>
+    <div class="tab-panel">内容2</div>
+    <div class="tab-panel">内容3</div>
+  </div>
+
+  <script>
+    // 获取所有 tab 按钮
+    const buttons = document.querySelectorAll(".tab-btn");
+
+    // 获取所有内容面板
+    const panels = document.querySelectorAll(".tab-panel");
+
+    // 遍历每一个按钮，并绑定点击事件
+    buttons.forEach((button, index) => {
+      button.onclick = function () {
+        // 1. 先把所有按钮的 active 类移除
+        //    这样可以保证同一时刻只有一个按钮高亮
+        buttons.forEach((item) => item.classList.remove("active"));
+
+        // 2. 再把所有内容面板的 active 类移除
+        //    这样可以保证同一时刻只有一个内容显示
+        panels.forEach((item) => item.classList.remove("active"));
+
+        // 3. 给当前点击的按钮加上 active 类
+        button.classList.add("active");
+
+        // 4. 根据当前按钮的下标 index
+        //    找到对应的内容面板并显示
+        panels[index].classList.add("active");
+      };
+    });
+  </script>
+</body>
+</html>
