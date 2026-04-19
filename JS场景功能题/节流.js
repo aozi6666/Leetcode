@@ -1,10 +1,11 @@
-// 创建一个“带节流 + 竞态处理 + 中断旧请求”的搜索函数
+// 创建一个“带节流 + 竞态处理 + 中断旧请求”的搜索函数（（节流不是“固定再等 delay”，而是“等剩余时间”））
 // fetch 请求回调
 // 两层竞态保护: AbortController + latestId
 function createThrottledFetch(delay = 300) {
     let timer = null;
     let controller = null;
     let latestId = 0;
+    // 上一次真正执行请求的时间
     let lastTime = 0;
   
     // 真正发请求的方法（fetch 版本）
@@ -72,6 +73,7 @@ function createThrottledFetch(delay = 300) {
       clearTimeout(timer);
   
       // 注册尾触发
+      // 间隔时间：补足剩余时间 = 节流间隔 - 已经过去多久
       timer = setTimeout(() => {
         lastTime = Date.now();
   
