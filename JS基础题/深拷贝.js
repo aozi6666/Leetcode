@@ -1,69 +1,77 @@
 /*
+  深拷贝的核心是递归。
+  基本类型直接返回，引用类型需要继续递归拷贝。
+  为了避免循环引用导致死递归，可以用 WeakMap 记录已经拷贝过的对象。
+  对于 Date、RegExp、Map、Set 这些特殊类型，需要单独处理。
+  对象遍历时可以用 Reflect.ownKeys，这样还能支持 Symbol key
+
  深拷贝核心思路,核心就三步：
     - 基本类型直接返回
     - 引用类型递归拷贝
     - 用 WeakMap 解决循环引用
 */
 
-function deepClone(target) {
-    // 1. 基本类型直接返回
-    //    因为基本类型不存在“深拷贝”问题
-    //    比如 number、string、boolean、undefined、symbol、bigint、null
-    if (target === null || typeof target !== "object") {
-      return target;
-    }
-  
-    // 2. 如果是数组，创建一个新数组
-    if (Array.isArray(target)) {
-      const cloneTarget = [];
-  
-      // 递归拷贝数组每一项
-      for (let i = 0; i < target.length; i++) {
-        cloneTarget.push(deepClone(target[i]));
-      }
-  
-      return cloneTarget;
-    }
-  
-    // 3. 如果是 Set，创建一个新 Set
-    if (target instanceof Set) {
-      const cloneTarget = new Set();
-  
-      // Set 里的每一项也要递归拷贝
-      target.forEach((value) => {
-        cloneTarget.add(deepClone(value));
-      });
-  
-      return cloneTarget;
-    }
-  
-    // 4. 如果是 Map，创建一个新 Map
-    if (target instanceof Map) {
-      const cloneTarget = new Map();
-  
-      // 这里保持“最小改动”思路：
-      // key 一般默认直接使用原 key
-      // value 做递归深拷贝
-      target.forEach((value, key) => {
-        cloneTarget.set(key, deepClone(value));
-      });
-  
-      return cloneTarget;
-    }
-  
-    // 5. 普通对象处理
-    const cloneTarget = {};
-  
-    // 6. 用 Reflect.ownKeys 遍历对象自身所有 key
-    //    这样不仅能拿到普通字符串 key，
-    //    还能拿到 Symbol key
-    Reflect.ownKeys(target).forEach((key) => {
-      cloneTarget[key] = deepClone(target[key]);
-    });
-  
-    return cloneTarget;
+function deepClone(target, map = new WeakMap()) {
+  // 1. 基本类型直接返回
+  //    因为基本类型没有“深拷贝”一说
+  if (target === null || typeof target !== "object") {
+    return target;
   }
-  
+
+  // 2. 处理 Date
+  if (target instanceof Date) {
+    return new Date(target);
+  }
+
+  // 3. 处理 RegExp
+  if (target instanceof RegExp) {
+    return new RegExp(target);
+  }
+
+  // 4. 处理循环引用
+  //    如果当前对象已经拷贝过，直接返回之前保存的结果
+  if (map.has(target)) {
+    return map.get(target);
+  }
+
+  // 5. 处理 Set
+  if (target instanceof Set) {
+    const newSet = new Set();
+    map.set(target, newSet);
+
+    target.forEach((value) => {
+      newSet.add(deepClone(value, map));
+    });
+
+    return newSet;
+  }
+
+  // 6. 处理 Map
+  if (target instanceof Map) {
+    const newMap = new Map();
+    map.set(target, newMap);
+
+    target.forEach((value, key) => {
+      newMap.set(key, deepClone(value, map));
+    });
+
+    return newMap;
+  }
+
+  // 7. 处理对象 / 数组
+  const cloneTarget = Array.isArray(target) ? [] : {};
+
+  // 先存起来，解决循环引用
+  map.set(target, cloneTarget);
+
+  // 8. 用 Reflect.ownKeys 支持 Symbol key
+  Reflect.ownKeys(target).forEach((key) => {
+    cloneTarget[key] = deepClone(target[key], map);
+  });
+
+  return cloneTarget;
+}
+
 
 /**
  * 测试
