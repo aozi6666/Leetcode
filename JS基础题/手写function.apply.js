@@ -8,7 +8,7 @@
 
 Function.prototype.myApply = function (context, args) {
     // 1. 处理 context
-    context = context || window;
+    context = context === null ? window : context;
   
     // 2. this 是调用 myApply 的原函数
     const fn = this;
