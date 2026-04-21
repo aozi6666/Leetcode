@@ -26,22 +26,24 @@ Function.prototype.myCall = function (context, ...args) {
     // Object(context)：把 context 强制转成对象。
     context = context == null ? window : Object(context);
   
-    // 2. this 就是调用 myCall 的原函数
+    // 2. 得到 调用function.myCall 的 函数
+    // this 就是调用 myCall 的原函数
     const fn = this;
   
-    // 3. 为了避免覆盖 context 原来的属性
-    //     Symbol方法:  创建一个绝对不会重复的唯一名字
+    // 3. 避免与原有 context对象的 fn 方法属性重名覆盖
+    //    使用Symbol方法创建一个唯一 属性名
     const key = Symbol("fn");
   
     // 4. 把 原函数-方法 临时挂到 context对象 身上
+    //    属性名为key,属性值为 fn(原方法)
     // ontext[key]：取contenx对象中 属性名为 key 的属性值(变量/方法)
     context[key] = fn;
   
-    // 5. 通过 对象调用函数
+    // 5. 通过 对象调用函数，实现this的指向
     //    这样函数里的 this 就会指向 context
     const result = context[key](...args);
   
-    // 6. 调用完成后,删除这个临时属性(函数方法)
+    // 6. 调用完成后,删除 context 对象 上的临时方法
     delete context[key];
   
     // 7. 返回函数执行结果
