@@ -1,31 +1,47 @@
 /*
     call 的作用就是：马上调用这个函数，并且强行指定 this 指向谁。 
     借用别人的函数，让这个函数里的 this 临时指向你指定的对象。
+    把这个函数临时放到对象身上，再让对象去调用它。谁调用函数，函数里的 this 就指向谁
 
     - call 是逐个传参
     - apply 是数组传参
+
+    实现关键: 通过 访问 对象中的方法
+    context[key] = fn;
+    context[key](...args);
+    - 先把原函数 fn 临时挂到 context 身上
+    - 再通过 context 来调用这个函数
+    - 这样函数里的 this 就变成 context 了
+
 */
 
+/* 
+ * 函数.call(对象, 参数1, 参数2, 参数3...)，参数为：
+ *  - context对象:  你想把 this 改成指向谁 （对象）
+ *  - args:  除第一个参数 context 以外，剩下所有参数，都收集到一个数组里
+*/
 Function.prototype.myCall = function (context, ...args) {
     // 1. 如果 context 是 null 或 undefined
-    //    浏览器环境下一般指向 window
-    context = context || window;
+    //    浏览器环境，非严格模式，指向全局 window 对象
+    // Object(context)：把 context 强制转成对象。
+    context = context == null ? window : Object(context);
   
     // 2. this 就是调用 myCall 的原函数
     const fn = this;
   
     // 3. 为了避免覆盖 context 原来的属性
-    //    这里用 Symbol 创建一个唯一属性名
+    //     Symbol方法:  创建一个绝对不会重复的唯一名字
     const key = Symbol("fn");
   
-    // 4. 把原函数临时挂到 context 身上
+    // 4. 把 原函数-方法 临时挂到 context对象 身上
+    // ontext[key]：取contenx对象中 属性名为 key 的属性值(变量/方法)
     context[key] = fn;
   
-    // 5. 通过对象调用函数
+    // 5. 通过 对象调用函数
     //    这样函数里的 this 就会指向 context
     const result = context[key](...args);
   
-    // 6. 调用完成后删除这个临时属性
+    // 6. 调用完成后,删除这个临时属性(函数方法)
     delete context[key];
   
     // 7. 返回函数执行结果
@@ -36,8 +52,8 @@ Function.prototype.myCall = function (context, ...args) {
     name: "Tom",
   };
   
-  function sayHi(age, city) {
-    console.log(this.name, age, city);
+  function sayHi(age) {
+    console.log(this.name, age);
   }
   
   sayHi.myCall(obj, 20, "Shanghai");
