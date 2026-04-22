@@ -3,12 +3,19 @@
 然后通过对象调用这个函数，因为隐式绑定规则下，谁调用函数，this 就指向谁。
 调用完成后再删除这个临时属性。
 
-两者区别只是参数形式不同，call 是逐个传参，apply 是数组传参。 
+两者区别只是参数形式不同，call 是逐个传参，apply 是数组传参。
+
+实现上和 myCall的差别：
+    1. 参数形式不同 （apply参数是打包成一个数组/类数组传， 直接 args）
+    2. 中间多了判断：
+        - myCall 里不用单独判断，因为 ...args 是剩余参数，不传参数时，args是[]空数组
+        - myApply 里需要单独判断，因为 args 是类数组，不传参数时，args === null
+          context[key](...args)  === context[key](undefined)会报错
 */
 
 Function.prototype.myApply = function (context, args) {
     // 1. 处理 context
-    context = context === null ? window : context;
+    context = context === null ? window : Object(context);
   
     // 2. this 是调用 myApply 的原函数
     const fn = this;
@@ -25,6 +32,7 @@ Function.prototype.myApply = function (context, args) {
     if (args == null) {
       result = context[key]();
     } else {
+      // “数组传参”，但真正调用函数的时候，还是得把 数组拆开 再传进去
       result = context[key](...args);
     }
   
