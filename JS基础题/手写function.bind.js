@@ -38,11 +38,7 @@ Function.prototype.myBind = function (context, ...args) {
     if (fn.prototype) {
       boundFn.prototype = Object.create(fn.prototype);
     }
-  
-    // 8. 可选：把 constructor 修正回来
-    //    不是必须，但更直观一些
-    boundFn.prototype.constructor = boundFn;
-  
+
     return boundFn;
   };
   
