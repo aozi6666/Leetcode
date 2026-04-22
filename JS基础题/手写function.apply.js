@@ -15,7 +15,9 @@
 
 Function.prototype.myApply = function (context, args) {
     // 1. 处理 context
-    context = context === null ? window : Object(context);
+    // 细节：null 和 undefined 在非严格模式下都会指向全局对象
+    // 要写 == 而不是 ===，== null 可以同时匹配 null 和 undefined
+    context = context == null ? window : Object(context);
   
     // 2. this 是调用 myApply 的原函数
     const fn = this;
