@@ -6,6 +6,7 @@
 
 // 给“数组的原型对象”新增了一个方法：Array.prototype.myReduce
 // 参数：callback 函数，初始值（数组，对象，字符串,数字）
+// Array 是构造函数
 Array.prototype.myReduce = function (callback, initialValue) {
     // 1. （重要‼️）this 指向调用 myReduce方法 的外部数组
     // arr 就是当前调用 这个方法 的数组本身
