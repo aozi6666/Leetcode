@@ -42,6 +42,50 @@ var compareVersion = function(version1, version2) {
     return 0;
 
 };
+
+/**
+ * 方法2: 不使用字符串的 .split()方法, 使用 双指针 + ASCII 码 字符串转整数，比较
+ * @param {string} version1
+ * @param {string} version2
+ * @return {number}
+ */
+
+var compareVersion2 = function(version1, version2) {
+    const m = version1.length;
+    const n = version2.length;
+    let i = 0;
+    let j = 0;
+
+    // 进入循环
+    while(i < m || j < n){
+        // 每次遇到 . 时，需要初始化 num1 和 num2
+        let num1 = 0;
+        let num2 = 0;
+
+        // 循环遇到 . 前，取出 num1
+        while(i < m && version1[i] !== '.'){
+            num1 = num1 * 10 + (version1.charCodeAt(i) - 48);
+            i++;
+        }
+
+        // 循环遇到 . 前，取出 num2
+        while(j < n && version2[j] !== '.'){
+            num2 = num2 * 10 + (version2.charCodeAt(j) - 48);
+            j++;
+        }
+
+        // 比较结果
+        if(num1 > num2) return 1;
+        else if(num1 < num2) return -1;
+        // 相同时，继续比较 下一组 . 之后的字符串
+        else if(num1 === num2){
+            i++;
+            j++;
+        }
+    }
+    // 如果所有版本号都相同，返回 0
+    return 0;
+}
 // @lc code=end
 
 
