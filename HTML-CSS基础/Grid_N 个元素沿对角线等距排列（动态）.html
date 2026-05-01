@@ -1,0 +1,73 @@
+<!-- 
+    方式2: Grid网格
+    N 个元素沿对角线等距排列 核心思路：
+        - 父元素分成 N × N 个格子
+        - 第 i 个元素放在第 i 行、第 i 列
+        - 这样自然就是对角线
+-->
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>N 个元素沿对角线等距排列</title>
+        <meta charset="utf-8"></meta>
+        <style>
+         * {
+                margin: 0;
+                padding: 0;
+            }
+
+            .box {
+                width: 400px;
+                height: 400px;
+                background-color: #f5f5f5;
+
+                /* 开启 grid 布局 */
+                display: grid;
+
+                /* 让每个子元素在自己的格子里居中 */
+                justify-items: center;
+                align-items: center;
+            }
+
+            .item {
+                background-color: skyblue;
+                font-size: 20px;
+                border-radius: 50%;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="box" class="box" >
+        </div>
+        <script>
+            const box = document.getElementById("box");
+
+            // 元素数量，想改几个就改这里
+            const count = 5;
+
+            // 动态设置 grid 是几行几列
+            box.style.gridTemplateColumns = `repeat(${count}, 1fr)`;
+            box.style.gridTemplateRows = `repeat(${count}, 1fr)`;
+
+            // 动态生成 count 个元素
+            for (let i = 1; i <= count; i++) {
+            const item = document.createElement("div");
+
+            item.className = "item";
+            item.innerText = i;
+
+            // 第 i 个元素放到第 i 列
+            item.style.gridColumn = i;
+
+            // 第 i 个元素放到第 i 行
+            item.style.gridRow = i;
+
+            box.appendChild(item);
+            }
+
+        </script>
+    </body>
+
+</html>
