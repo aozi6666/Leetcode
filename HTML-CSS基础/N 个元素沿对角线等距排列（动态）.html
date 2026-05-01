@@ -1,6 +1,78 @@
 <!-- 
+    方式1: CSS 变量 + 绝对定位
     N 个元素沿对角线等距排列，本质:  让每个元素的 x、y 坐标按相同比例变化。
         第 i 个元素的位置比例是 i / (N - 1)，所以可以用绝对定位，
         让 left 和 top 都等于这个比例乘以 100%。
         这样无论 N 是多少，都能动态等距分布在对角线上
+
+    left = top = i / (N - 1) * 100%
+    用 CSS 变量存储总数和当前索引，
+    通过 calc 计算每个元素的位置比例 i/(count-1)，
+    再同时赋给 left 和 top，实现对角线等距分布
 -->
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>N 个元素沿对角线等距排列</title>
+        <meta charset="utf-8"></meta>
+        <style>
+            * {
+                margin: 0px;
+                padding: 0px;
+            }
+            .box {
+                width: 300px;
+                height: 300px;
+                background-color: #f5f5f5;
+
+                /* 父元素开启相对定位 */
+                position: relative;
+            }
+            .item {
+                height: 40px;
+                width: 40px;
+                background-color: skyblue;
+
+                /* 文本局中 */
+                line-height: 40px;
+                text-align: center;
+
+                /* 圆角 */
+                border-radius: 50%;
+
+                /* 子元素开启绝对定位 */
+                position: absolute;
+
+                /* 核心：left 和 top 使用同一个比例 */
+
+                /* 
+                calc() = CSS 里的计算器（让 CSS 能做数学运算）:
+                    位置 = 第几个 / (总数 - 1) × 100%;
+                var(--i) = 取变量值
+                */
+                left: calc(var(--i) / (var(--count) - 1) * 100%);
+                top: calc(var(--i) / (var(--count) - 1) * 100%);
+
+                /* 让元素中心点对准位置 */
+                transform: translate(-50%, -50%);
+            }
+        </style>
+    </head>
+    <body>
+        <!-- 
+            CSS 变量（自定义变量）：--xxx变量名，不是--运算符
+            --count: 5; 表示 一共有 5 个元素
+            --i: ; 表示 当前是第 i 个元素
+        -->
+
+        <div class="box" style="--count: 5;">
+            <div class="item itemA" style="--i: 0">1</div>
+            <div class="item itemB" style="--i: 1">2</div>
+            <div class="item itemC" style="--i: 2">3</div>
+            <div class="item itemD" style="--i: 3">4</div>
+            <div class="item itemE" style="--i: 4">5</div>
+        </div>
+    </body>
+
+</html>
