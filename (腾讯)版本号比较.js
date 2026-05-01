@@ -8,7 +8,7 @@
 
 // @lc code=start
 /**
- * 使用字符串 .split()方法  + parseInt 数字转换为整数
+ * 方法1:使用字符串 .split()方法  + parseInt 数字转换为整数
  * @param {string} version1
  * @param {string} version2
  * @return {number}
@@ -45,6 +45,7 @@ var compareVersion = function(version1, version2) {
 
 /**
  * 方法2: 不使用字符串的 .split()方法, 使用 双指针 + ASCII 码 字符串转整数，比较
+ * 字符串中 str.charCodeAt(index) 方法 返回字符串指定位置的 ASCII 码值
  * @param {string} version1
  * @param {string} version2
  * @return {number}
@@ -64,6 +65,13 @@ var compareVersion2 = function(version1, version2) {
 
         // 循环遇到 . 前，取出 num1
         while(i < m && version1[i] !== '.'){
+            // * 10 ： 左移动，拼数字
+            /* 字符串 "123"，你想变成数字 123，需要
+                1 → 1
+                1 → 1*10 + 2 = 12
+                12 → 12*10 + 3 = 123
+            */
+            // version1.charCodeAt(i)：（i）表示取version1字符串中第几个字符
             num1 = num1 * 10 + (version1.charCodeAt(i) - 48);
             i++;
         }
