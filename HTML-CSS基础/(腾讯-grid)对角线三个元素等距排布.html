@@ -1,0 +1,62 @@
+<!-- 
+ 对角线三个元素等距排布:（正方形盒子）
+                A
+                     B
+                            C
+三个点在 左上 → 右下对角线 上，并且等距分布 
+
+实现方法1：绝对定位 position:absolute 
+            (对角线本质实现：left = top)
+
+实现方式2: grid布局 (直接用网格 (1,1) → (2,2) → (3,3))
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>对角线三个元素等距排布</title>
+        <meta charset="utf-8"></meta>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            * {
+                margin: 0px;
+                padding: 0px;
+            }
+            .box {
+                width: 300px;
+                height: 300px;
+                background-color: skyblue;
+
+                /* 父元素开启网格布局 */
+                display: grid;
+
+                /* 定义“列”/“行”的数量和宽度(3*3) */
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+
+                /* 默认每个格子内容在左上角排序，需要每个item局中对齐 */
+                justify-items: center;
+                align-items: center;
+            }
+
+            .itemA{
+                grid-column: 1;
+                grid-row: 1;
+            }
+            .itemB{
+                grid-column: 2;
+                grid-row: 2;
+            }
+            .itemC{
+                grid-column: 3;
+                grid-row: 3;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="box">
+            <div class="item itemA">A</div>
+            <div class="item itemB">B</div>
+            <div class="item itemC">C</div>
+        </div>
+    </body>
+</html>
