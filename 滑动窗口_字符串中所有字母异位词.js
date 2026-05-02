@@ -26,7 +26,7 @@
  * @param {string} p
  * @return {number[]}
  */
-var findAnagrams = function(s, p) {
+var findAnagrams = function(s, t) {
   //题目本质：在字符串 s 里找所有“和 p 字符组成一样”的子串（顺序可以不同）
   //解题思路：滑动指针 + 两个map
 
