@@ -36,20 +36,21 @@ var lengthOfLongestSubstring = function(s) {
     // 进入循环
     while(right < s.length){
         // 得到要进入窗口的 right 指针对应的元素
-        let c = s[right];  // key
+        let currentChar = s[right];  // key
         // 窗口right右移
         right++;
         // 进行窗口的更新: key 对应的 value  的计数更新
-        window.set(c, (window.get(c) || 0) + 1);
+        window.set(currentChar, (window.get(currentChar) || 0) + 1);
 
-        // 判断左窗口是否需要收缩
-        while(window.get(c) > 1){
+        // 判断左窗口是否需要收缩(❗“把窗口修复到合法状态”)
+        // ✅ while 可能会连续执行多次，一直缩到“合法”为止
+        while(window.get(currentChar) > 1){
             // 取窗口左边界元素
-            let d = s[left];
+            let deleteChar = s[left];
             // 窗口左指针右移
             left++;
             // 窗口的更新：key 对应的 value  的计数更新
-            window.set(d, window.get(d) - 1);
+            window.set(deleteChar, window.get(deleteChar) - 1);
         }
 
         // 更新结果
