@@ -26,62 +26,8 @@
  * @param {string} p
  * @return {number[]}
  */
-var findAnagrams = function (s, p) {
-    const n = s.length, m = p.length;
-    if (m > n) return [];
-  
-    const base = "a".charCodeAt(0);
-    const cnt = new Array(26).fill(0);
-  
-    // 先把 p 的需求减进去：cnt[x] = -need[x]
-    for (let i = 0; i < m; i++) {
-      const pi = p.charCodeAt(i) - base;
-      cnt[pi]--;
-    }
-  
-    // diff = 当前有多少个字母 cnt[i] != 0
-    let diff = 0;
-    for (let i = 0; i < 26; i++) {
-      if (cnt[i] !== 0) diff++;
-    }
-  
-    const res = [];  // 结果数组
-  
-    // 辅助函数：更新 数组cnt[pos] 前后，O(1) 维护 diff（当前有多少个字母 cnt[i] != 0）
-    const add = (pos, delta) => {
-        // delta 为 +1 或 -1
-        const before = cnt[pos];
-        const after = before + delta;
-    
-        // before 是否为 0，after 是否为 0，决定 diff 怎么变
-        if (before === 0 && after !== 0) diff++;
-        else if (before !== 0 && after === 0) diff--;
-            
-        cnt[pos] = after;
-    };
-  
-    // 初始化窗口：把 s[0..m-1] 加进去
-    for (let i = 0; i < m; i++) {
-      const si = s.charCodeAt(i) - base;
-      add(si, +1);
-    }
-    // 初始化窗口后，如果diff为0，则说明窗口内的字符串是p的异位词
-    if (diff === 0) res.push(0);
-  
-    // 滑动窗口
-    for (let r = m; r < n; r++) {
-        // 滑动窗口始终是：m 长度 [r-m, r];
-        const inPos = s.charCodeAt(r) - base;       // 右边界的进入窗口的字符
-        const outPos = s.charCodeAt(r - m) - base;  // 左边界脱离窗口的字符
-    
-        add(inPos, +1);
-        add(outPos, -1);
-        
-        // 如果diff为0，则说明窗口内的字符串是p的异位词，则将窗口的起始索引加入结果数组
-        if (diff === 0) res.push(r - m + 1);
-    }
-  
-    return res;
-};
-  console.log(findAnagrams("cbaebabacd", "abc"));
-  console.log(findAnagrams("abab", "ab"));
+var findAnagrams = function(s, p) {
+  //题目本质：在字符串 s 里找所有“和 p 字符组成一样”的子串（顺序可以不同）
+}
+console.log(findAnagrams("cbaebabacd", "abc"));
+console.log(findAnagrams("abab", "ab"));
