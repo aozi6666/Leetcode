@@ -19,13 +19,18 @@
  */
 var swapPairs = function(head) {
     // 解题思路：递归 + reverseN 思想
+    
+    // 边界判断：不足2个，直接返回 原链表（递归也用）
+    if(head === null || head.next === null){
+        return head;
+    }
 
-    // 回调：反转 N 个节点的链表
-    function reverseN(head, n){
+     // 回调：反转 N 个节点的链表
+     function reverseN(head, n){
         if(n === 1){
             return head;
         }
-        if(head !== null || head.next === null){
+        if(head === null || head.next === null){
             return head;
         }
 
@@ -44,9 +49,25 @@ var swapPairs = function(head) {
             }
             n--;
         }
-        
+        // 此时的 cur 是第 n + 1 个节点，head 是反转后的尾结点
+        head.next = cur;
+        return pre;
     }
-    
+
+    // 调用 反转 2 个节点的函数，需要接住反转后的头结点（最终链表的头结点）
+    let newHead = reverseN(head, 2);
+
+    // 递归： 递归调用，返回，反转后的头结点
+    // 此时：
+    // 原来的 head 已经变成第二个节点
+    // 它的 next 指向的是后面的链表起点
+
+    // 递归处理后面的链表
+    // ! 一定要用 原来的head接住，要是错用 newHead 会形成全部反转
+    head.next = swapPairs(head.next);
+
+    // 返回最终的链表
+    return newHead;
 };
 // @lc code=end
 
