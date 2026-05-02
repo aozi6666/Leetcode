@@ -28,6 +28,70 @@
  */
 var findAnagrams = function(s, p) {
   //题目本质：在字符串 s 里找所有“和 p 字符组成一样”的子串（顺序可以不同）
+  // 解题思路：滑动指针 + 两个map
+  // 🎯 need：记录 t 中每个字符需要的次数
+  let need = new Map();
+
+  // 🪟 window：当前窗口中字符的次数
+  let window = new Map();
+
+  // 🔢 统计 t 的字符频率
+  for (let c of t) {
+      need.set(c, (need.get(c) || 0) + 1);
+  }
+
+  let left = 0, right = 0;
+
+  // ✅ valid：有多少字符已经“满足要求”
+  let valid = 0;
+
+  // 🎯 结果数组
+  let res = [];
+
+  while (right < s.length) {
+
+      // 👉 右边加入字符
+      let c = s[right];
+      right++;
+
+      // 👉 只处理 need 里的字符
+      if (need.has(c)) {
+
+          // window 中该字符 +1
+          window.set(c, (window.get(c) || 0) + 1);
+
+          // 如果刚好达到 need 要求 → valid++
+          if (window.get(c) === need.get(c)) {
+              valid++;
+          }
+      }
+
+      // 👉 当窗口长度 >= t长度，就要开始缩
+      while (right - left >= t.length) {
+
+          // 🎯 如果所有字符都匹配 → 找到一个异位词
+          if (valid === need.size) {
+              res.push(left);
+          }
+
+          // 👉 左边移出字符
+          let d = s[left];
+          left++;
+
+          if (need.has(d)) {
+
+              // ❗如果移出前是满足的 → 移出后就不满足了
+              if (window.get(d) === need.get(d)) {
+                  valid--;
+              }
+
+              // window 中该字符 -1
+              window.set(d, window.get(d) - 1);
+          }
+      }
+  }
+
+  return res;
 }
 console.log(findAnagrams("cbaebabacd", "abc"));
 console.log(findAnagrams("abab", "ab"));
