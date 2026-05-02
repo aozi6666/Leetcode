@@ -14,11 +14,13 @@
 // map基础知识
 /* 
     map数据结构 （键-值 对 key-value）
+    常见属性：map.size 获取 map 的大小,key 的个数
     常用方法：
         1. map.has(key) 判断是否存在键key
         2. map.get(key) 获取键key对应的值value
         3. map.set(key, value) 设置键key对应的值value
         4. map.delete(key) 删除键key对应的键值对
+    
     场景：计数优先用 Map
 */
 var lengthOfLongestSubstring = function(s) {

@@ -28,21 +28,23 @@
  */
 var findAnagrams = function(s, p) {
   //题目本质：在字符串 s 里找所有“和 p 字符组成一样”的子串（顺序可以不同）
-  // 解题思路：滑动指针 + 两个map
-  // 🎯 need：记录 t 中每个字符需要的次数
+  //解题思路：滑动指针 + 两个map
+
+  // 🎯 need：记录 t 中每个字符需要的次数（标准答案）
   let need = new Map();
 
   // 🪟 window：当前窗口中字符的次数
   let window = new Map();
 
-  // 🔢 统计 t 的字符频率
+  // 🔢 统计 t 的字符频率（让窗口的“字符频率表” == need）
   for (let c of t) {
       need.set(c, (need.get(c) || 0) + 1);
   }
 
   let left = 0, right = 0;
 
-  // ✅ valid：有多少字符已经“满足要求”
+  // ✅ valid：有多少种类别的字符已经“满足要求”（表示某种字符类别“达标了”）
+  // 某种自符类别达标：比如a:2, 则 a:1 不达标，valid不会++
   let valid = 0;
 
   // 🎯 结果数组
@@ -60,7 +62,7 @@ var findAnagrams = function(s, p) {
           // window 中该字符 +1
           window.set(c, (window.get(c) || 0) + 1);
 
-          // 如果刚好达到 need 要求 → valid++
+          // 如果这个字符刚好达到 need 要求 → valid++
           if (window.get(c) === need.get(c)) {
               valid++;
           }
