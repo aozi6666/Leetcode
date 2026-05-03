@@ -37,7 +37,26 @@ var findKthLargest = function(nums, k) {
             while(left <= right && nums[left] < pivot){
                 left++;
             }
+            // 循环（从右边开始)：找到第一个比 pivot 小的元素
+            // 找到 数组第一个start 就停止
+            while(right >= start + 1 && nums[right] >= pivot){
+                right--;
+            }
+
+            // 当找到 一左一右，就交换
+            if(left <= right){
+                [nums[left], nums[right]] = [nums[right], nums[left]];
+                // 开启下一轮
+                left++;
+                right--;
+            }
         }
+
+        // 放到最终位置（right）
+        [nums[start], nums[right]] = [nums[right], nums[start]];
+
+        // 返回最终位置下标
+        return right;
 
     }
 
