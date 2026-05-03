@@ -19,52 +19,53 @@ var sortArray = function(nums) {
     // 2️⃣ 排序整个数组
     quickSort(nums, 0, nums.length - 1);
     // 快速排序主函数
-    var quickort = function(nums, left, right) {
+    var quickSort = function(nums, left, right) {
         // 递归结束条件
         if (left >= right) return;
     
-        // 找到一个“正确位置”的元素
+        // 找到一个“正确位置”的元素，传递给 partition 的处理区间【left, right】
         var pivotIndex = partition(nums, left, right);
     
         // 排左边
-        sort(nums, left, pivotIndex - 1);
+        quickSort(nums, left, pivotIndex - 1);
     
         // 排右边
-        sort(nums, pivotIndex + 1, right);
+        quickSort(nums, pivotIndex + 1, right);
     };
     
     // 核心：把一个元素放到正确位置
-    var partition = function(nums, left, right) {
+    // 接收参数：[left, right] ✅ “当前要处理的范围边界”
+    function partition(nums, start, end) {
         // 选第一个元素作为 pivot（基准）
-        var pivot = nums[left];
+        let pivot = nums[start];
     
-        // 左右指针
-        var leftPtr = left + 1;
-        var rightPtr = right;
+        // （扫描）左右指针
+        var left = start + 1;
+        var right = end;
     
         while (true) {
             // 从左往右找 > pivot 的
-            while (leftPtr <= right && nums[leftPtr] <= pivot) {
-                leftPtr++;
+            while (left <= right && nums[left] <= pivot) {
+                left++;
             }
     
             // 从右往左找 <= pivot 的
-            while (rightPtr >= left + 1 && nums[rightPtr] > pivot) {
-                rightPtr--;
+            while (right >= start + 1 && nums[right] > pivot) {
+                right--;
             }
     
             // 指针交错，结束
-            if (leftPtr > rightPtr) break;
+            if (left> right) break;
     
             // 交换两个位置
-            [nums[leftPtr], nums[rightPtr]] = [nums[rightPtr], nums[leftPtr]];
+            [nums[left], nums[right]] = [nums[right], nums[left]];
         }
     
         // 把 pivot 放到正确位置
-        [nums[left], nums[rightPtr]] = [nums[rightPtr], nums[left]];
+        [nums[start], nums[right]] = [nums[right], nums[start]];
     
         // 返回 pivot 的最终位置
-        return rightPtr;
+        return right;
     };
     
     // 洗牌（打乱数组）
