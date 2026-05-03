@@ -1,0 +1,98 @@
+/*
+ * @lc app=leetcode.cn id=912 lang=javascript
+ * @lcpr version=30403
+ *
+ * [912] 排序数组
+ */
+
+// @lc code=start
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+var sortArray = function(nums) {
+    // 本质：快速排序-构造二叉搜索树的过程
+    var quickSort = function(nums) {
+        // 1️⃣ 先打乱数组，避免最坏情况
+        shuffle(nums);
+    
+        // 2️⃣ 排序整个数组
+        sort(nums, 0, nums.length - 1);
+    };
+    
+    // 快速排序主函数
+    var sort = function(nums, left, right) {
+        // 递归结束条件
+        if (left >= right) return;
+    
+        // 找到一个“正确位置”的元素
+        var pivotIndex = partition(nums, left, right);
+    
+        // 排左边
+        sort(nums, left, pivotIndex - 1);
+    
+        // 排右边
+        sort(nums, pivotIndex + 1, right);
+    };
+    
+    // 核心：把一个元素放到正确位置
+    var partition = function(nums, left, right) {
+        // 选第一个元素作为 pivot（基准）
+        var pivot = nums[left];
+    
+        // 左右指针
+        var leftPtr = left + 1;
+        var rightPtr = right;
+    
+        while (true) {
+            // 从左往右找 > pivot 的
+            while (leftPtr <= right && nums[leftPtr] <= pivot) {
+                leftPtr++;
+            }
+    
+            // 从右往左找 <= pivot 的
+            while (rightPtr >= left + 1 && nums[rightPtr] > pivot) {
+                rightPtr--;
+            }
+    
+            // 指针交错，结束
+            if (leftPtr > rightPtr) break;
+    
+            // 交换两个位置
+            [nums[leftPtr], nums[rightPtr]] = [nums[rightPtr], nums[leftPtr]];
+        }
+    
+        // 把 pivot 放到正确位置
+        [nums[left], nums[rightPtr]] = [nums[rightPtr], nums[left]];
+    
+        // 返回 pivot 的最终位置
+        return rightPtr;
+    };
+    
+    // 洗牌（打乱数组）
+    var shuffle = function(nums) {
+        for (let i = nums.length - 1; i > 0; i--) {
+            // 在 0 ~ i 之间随机选一个
+            const randomIndex = Math.floor(Math.random() * (i + 1));
+    
+            // 交换
+            [nums[i], nums[randomIndex]] = [nums[randomIndex], nums[i]];
+        }
+    };
+    
+};
+// @lc code=end
+
+
+
+/*
+// @lcpr case=start
+// [5,2,3,1]\n
+// @lcpr case=end
+
+// @lcpr case=start
+// [5,1,1,2,0,0]\n
+// @lcpr case=end
+
+ */
+
