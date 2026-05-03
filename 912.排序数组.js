@@ -12,16 +12,14 @@
  */
 var sortArray = function(nums) {
     // 本质：快速排序-构造二叉搜索树的过程
-    var quickSort = function(nums) {
-        // 1️⃣ 先打乱数组，避免最坏情况
-        shuffle(nums);
+
+    // 1️⃣ 先打乱数组，避免最坏情况
+    shuffle(nums);
     
-        // 2️⃣ 排序整个数组
-        sort(nums, 0, nums.length - 1);
-    };
-    
+    // 2️⃣ 排序整个数组
+    quickSort(nums, 0, nums.length - 1);
     // 快速排序主函数
-    var sort = function(nums, left, right) {
+    var quickort = function(nums, left, right) {
         // 递归结束条件
         if (left >= right) return;
     
