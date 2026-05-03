@@ -43,7 +43,7 @@ var sortArray = function(nums) {
         var left = start + 1;
         var right = end;
     
-        while (true) {
+        while (left <= right) {
             // 从左往右找 > pivot 的
             while (left <= right && nums[left] <= pivot) {
                 left++;
@@ -53,12 +53,13 @@ var sortArray = function(nums) {
             while (right >= start + 1 && nums[right] > pivot) {
                 right--;
             }
-    
-            // 指针交错，结束
-            if (left> right) break;
-    
-            // 交换两个位置
-            [nums[left], nums[right]] = [nums[right], nums[left]];
+
+            if (left <= right) {
+                // 交换两个位置
+                [nums[left], nums[right]] = [nums[right], nums[left]];
+                left++;
+                right--;
+            }
         }
     
         // 把 pivot 放到正确位置
