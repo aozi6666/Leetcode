@@ -13,6 +13,33 @@
  */
 var findKthLargest = function(nums, k) {
     // 快速选择：只走一边
+    function shuffle(nums){
+        for(let i = nums.length - 1; i > 0; i--){
+            // 从 0 - i 随机出个随机数，作为下标
+            let randomIndex = Math.floor(Math.random() * ( i + 1));
+            
+            [nums[i], nums[randomIndex]] = [nums[randomIndex], nums[i]];
+        }
+    }
+
+    // partation 选择元素到最终位置
+    function partition(nums, start, end){
+        // 基准元素
+        let pivot = nums[start];
+        // 左右指针
+        let left = start + 1;
+        let right = end;
+
+        // 循环
+        while(left <= right){
+            // 循环（从左往右）：找到第一个比 pivot 大的元素
+            // 找到 right 就停止
+            while(left <= right && nums[left] < pivot){
+                left++;
+            }
+        }
+
+    }
 
     // 1. 打乱数组
     shuffle(nums);
@@ -39,7 +66,7 @@ var findKthLargest = function(nums, k) {
         else if(pivotIndex > target){
             right = pivotIndex - 1;
         } 
-        else{
+        else if(pivotIndex === target){
             // 找到目标元素
             return nums[pivotIndex];
         }
