@@ -37,6 +37,8 @@ var reorderList = function(head) {
 
     // 2. 反转链表中点之后的链表
     let newHead = reverse(slow.next);
+    // 反转不会自动断开原链表的连接，需要断链
+    slow.next = null;
 
     // 反转链表回调
     function reverse(head){
