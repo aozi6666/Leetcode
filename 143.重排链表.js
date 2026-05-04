@@ -36,7 +36,7 @@ var reorderList = function(head) {
     }
 
     // 2. 反转链表中点之后的链表
-    reverse(slow.next);
+    let newHead = reverse(slow.next);
 
     // 反转链表回调
     function reverse(head){
@@ -61,6 +61,28 @@ var reorderList = function(head) {
 
         return pre;
     }
+
+    // 3. 合并链表（交替）
+    // 定义两个指针
+    let p1 = head;
+    let p2 = newHead;
+
+    while(p2 !== null){
+        // 每次进循环定义两个临时指针（指向下一个元素）
+        let temp1 = p1.next;
+        let temp2 = p2.next;
+
+        // 拼接链表
+        p2.next = p1.next;
+        p1.next = p2;
+
+        // 移动下一组
+        p1 = temp1;
+        p2 = temp2;
+    }
+
+    return head;
+
 
 };
 // @lc code=end
