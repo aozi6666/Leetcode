@@ -48,6 +48,18 @@ var reorderList = function(head) {
         let cur = head;
         let pre = null;
         let next = head.next;
+
+        // 循环
+        while(cur !== null){
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+            if(next !== null){
+                next = next.next;
+            }
+        }
+
+        return pre;
     }
 
 };
