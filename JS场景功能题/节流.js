@@ -107,3 +107,25 @@ function createThrottledFetch(delay = 300) {
     };
   }
   
+function throttle(fn, delay = 300){
+  let lastTime = 0;
+  let timer = null;
+
+  return function(...args){
+    const now = Date.now();
+
+    // 时间戳版本（leading）
+    if(now - lastTime >= delay){
+      lastTime = now;
+      fn.apply(this, args);
+    } else {
+      // 清空定时器
+      clearTimeout(timer);
+      // 开启新定时器
+      timer = setTimeout(() => {
+        lastTime = Date.now();
+        fn.apply(this, args);
+      }, delay - (now - lastTime));
+    }
+  }
+}
