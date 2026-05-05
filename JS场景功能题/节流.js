@@ -135,14 +135,14 @@ function throttle(fn, delay = 300){
 }
 
 // 使用方法
-const reslut = throttle((value, id, latestId) => {
-  fetch(`/api/search?query=${encodeURLComponent(value)}`)
+const result = throttle((value, id, latestId) => {
+  fetch(`/api/search?query=${encodeURIComponent(value)}`)
     .then((res) => {
       if(id === latestId){
-        console.log(res.json());
+        console.log(res);
       }
     })
-    .catch((err => {
+    .catch((err) => {
       console.log(err);
-    }))
+    })
 }, 300);
