@@ -3,74 +3,40 @@
   基本类型直接返回，引用类型需要继续递归拷贝。
   为了避免循环引用导致死递归，可以用 WeakMap 记录已经拷贝过的对象。
   对于 Date、RegExp、Map、Set 这些特殊类型，需要单独处理。
-  对象遍历时可以用 Reflect.ownKeys，这样还能支持 Symbol key
 
  深拷贝核心思路,核心就三步：
     - 基本类型直接返回
-    - 引用类型递归拷贝
+    - 引用类型（数组 / 对象）递归拷贝
     - 用 WeakMap 解决循环引用
 */
-
 function deepClone(target, map = new WeakMap()) {
   // 1. 基本类型直接返回
-  //    因为基本类型没有“深拷贝”一说
   if (target === null || typeof target !== "object") {
     return target;
   }
 
-  // 2. 处理 Date
-  if (target instanceof Date) {
-    return new Date(target);
-  }
-
-  // 3. 处理 RegExp
-  if (target instanceof RegExp) {
-    return new RegExp(target);
-  }
-
-  // 4. 处理循环引用
-  //    如果当前对象已经拷贝过，直接返回之前保存的结果
+  // 2. 解决循环引用
   if (map.has(target)) {
     return map.get(target);
   }
 
-  // 5. 处理 Set
-  if (target instanceof Set) {
-    const newSet = new Set();
-    map.set(target, newSet);
-
-    target.forEach((value) => {
-      newSet.add(deepClone(value, map));
-    });
-
-    return newSet;
-  }
-
-  // 6. 处理 Map
-  if (target instanceof Map) {
-    const newMap = new Map();
-    map.set(target, newMap);
-
-    target.forEach((value, key) => {
-      newMap.set(key, deepClone(value, map));
-    });
-
-    return newMap;
-  }
-
-  // 7. 处理对象 / 数组
+  // 3. 区分数组和对象
   const cloneTarget = Array.isArray(target) ? [] : {};
 
-  // 先存起来，解决循环引用
+  // 4. 先存 map，防止循环引用
   map.set(target, cloneTarget);
 
-  // 8. 用 Reflect.ownKeys 支持 Symbol key
-  Reflect.ownKeys(target).forEach((key) => {
-    cloneTarget[key] = deepClone(target[key], map);
-  });
+  // 5. 遍历自身属性
+  for (let key in target) {
+    if (Object.prototype.hasOwnProperty.call(target, key)) {
+      cloneTarget[key] = deepClone(target[key], map);
+    }
+  }
 
   return cloneTarget;
 }
+
+
 
 
 /**
