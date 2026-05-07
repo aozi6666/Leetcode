@@ -42,4 +42,21 @@ Function.prototype.myBind = function (context, ...args) {
     return boundFn;
   };
   
+
+// 用法
+function say(age, city) {
+  console.log(this.name, age, city);
+}
+
+const obj = {
+  name: "张三"
+};
+
+// 先把 say函数 里面的 this 绑定成 obj
+// 提前传一个参数 age=18
+// 返回一个新函数 newFn，就是执行 函数say，传递剩下的参数
+const newFn = say.bind(obj, 18);
+
+// 等价于执行 say.apply(obj, [18, "北京"]);
+newFn("北京");  // 张三 18 北京
   
