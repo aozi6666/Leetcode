@@ -27,7 +27,8 @@ Function.prototype.myApply = function (context, args) {
     // 3. 创建唯一属性，防止冲突
     const key = Symbol("fn");
   
-    // 4. 临时挂载函数
+    // 4. 临时挂载函数：模拟对象上的属性方法
+    // boj.ff = fn(原方法)
     context[key] = fn;
   
     let result;
@@ -45,7 +46,7 @@ Function.prototype.myApply = function (context, args) {
   
     // 7. 返回结果
     return result;
-  };
+};
 
 
 const obj = {
