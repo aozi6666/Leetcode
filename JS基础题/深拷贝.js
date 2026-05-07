@@ -9,8 +9,12 @@
     - 引用类型（数组 / 对象）递归拷贝
     - 用 WeakMap 解决循环引用
 */
+
+// 参数：target 是旧对象/旧数组
 function deepClone(target, map = new WeakMap()) {
   // 1. 基本类型直接返回
+  // 判断基本类型用 typeof + null，
+  // 判断具体类型再用 Object.prototype.toString.call(this指向);
   if (target === null || typeof target !== "object") {
     return target;
   }
@@ -21,6 +25,7 @@ function deepClone(target, map = new WeakMap()) {
   }
 
   // 3. 区分数组和对象
+  // cloneTarget 是新对象/新数组
   const cloneTarget = Array.isArray(target) ? [] : {};
 
   // 4. 先存 map，防止循环引用
@@ -28,13 +33,17 @@ function deepClone(target, map = new WeakMap()) {
 
   // 5. 遍历自身属性
   for (let key in target) {
+    // 判断这个 key属性名 是不是 target数组/对象 自己身上的属性，确保不是原型链上的
     if (Object.prototype.hasOwnProperty.call(target, key)) {
+      // 新对象 cloneTarget 加一个同名属性
+      // 值是旧对象对应属性，深拷贝后的结果
       cloneTarget[key] = deepClone(target[key], map);
     }
   }
 
   return cloneTarget;
 }
+
 
 
 
