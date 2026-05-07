@@ -1,6 +1,7 @@
 /*
-手写 call / apply 的核心思路，是把原函数临时挂载到目标对象上，
-然后通过对象调用这个函数，因为隐式绑定规则下，谁调用函数，this 就指向谁。
+函数.apply(this指向, 参数数组)
+手写 call / apply 的核心思路，是把 原函数 临时挂载到 目标对象上，
+然后通过 对象调用这个函数，因为隐式绑定规则下，谁调用函数，this 就指向谁。
 调用完成后再删除这个临时属性。
 
 两者区别只是参数形式不同，call 是逐个传参，apply 是数组传参。
@@ -13,6 +14,7 @@
           context[key](...args)  === context[key](undefined)会报错
 */
 
+// 函数.apply(this指向, 参数数组)
 Function.prototype.myApply = function (context, args) {
     // 1. 处理 context
     // 细节：null 和 undefined 在非严格模式下都会指向全局对象
@@ -45,12 +47,16 @@ Function.prototype.myApply = function (context, args) {
     return result;
   };
 
-  const obj = {
-    name: "Tom",
-  };
-  
-  function sayHi(age, city) {
-    console.log(this.name, age, city);
-  }
-  
-  sayHi.myApply(obj, [20, "Shanghai"]);
+
+const obj = {
+  name: "我是object中的name属性"
+}
+
+function showInfo(age, city) {
+  // 展示信息
+  console.log(this.name, age, city);
+}
+
+// apply  含义
+// 立刻调用 showInfo函数，让 showInfo函数 里面的 this 指向 obj
+showInfo.myApply(obj, [18, "上海"])
