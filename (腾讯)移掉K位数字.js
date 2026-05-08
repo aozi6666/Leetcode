@@ -18,7 +18,10 @@ var removeKdigits = function(num, k) {
     // 定义栈：存结果
     const stack = [];
 
-    // bian
+    // 边界判断
+    if(k >= num.length){
+        return "0";
+    }
 
     for (let digit of num) {
         // 当前数字更小，说明前面的栈顶数字应该被删除
