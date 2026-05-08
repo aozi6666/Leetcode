@@ -18,11 +18,14 @@ var removeKdigits = function(num, k) {
     // 定义栈：存结果
     const stack = [];
 
+    // bian
+
     for (let digit of num) {
         // 当前数字更小，说明前面的栈顶数字应该被删除
         // 栈顶元素用 stack[stack.length - 1] 表示
         while ( k > 0 && stack.length > 0 && stack[stack.length - 1] > digit) {
             stack.pop();
+            // 永久移除这一位，k--
             k--;
         }
 
@@ -39,7 +42,7 @@ var removeKdigits = function(num, k) {
     // 拼成字符串
     let result = stack.join("");
 
-    // 去掉前导零
+    // 去掉前导零（正则）
     result = result.replace(/^0+/, "");
 
     // 如果结果为空，返回 "0"
