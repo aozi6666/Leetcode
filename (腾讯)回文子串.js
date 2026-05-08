@@ -19,11 +19,7 @@ var countSubstrings = function(s) {
 
     // 从 left 和 right 开始向两边扩散
     function expand(left, right) {
-        while (
-            left >= 0 &&
-            right < s.length &&
-            s[left] === s[right]
-        ) {
+        while ( left >= 0 && right < s.length && s[left] === s[right]) {
             // 找到一个回文子串
             count++;
 
