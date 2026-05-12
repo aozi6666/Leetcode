@@ -116,4 +116,12 @@ LRUCache.prototype._makeRecently = function(key){
     this.cache._addLast(x);
 }
 
-// 
+// 添加 新节点 到尾部
+LRUCache.prototype._addRecently = function(key, value){
+    // 新建一个节点
+    const x = new Node(key, value);
+    // 添加尾部（最新使用）
+    this.cache._addLast(x);
+    // (重要)添加到 map 中
+    this.map.set(key, x);
+}
