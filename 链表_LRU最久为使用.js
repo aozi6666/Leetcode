@@ -68,3 +68,12 @@ DobuleList.prototype._addLast = function(x) {
     // 节点个数 +1
     this.size++;
 }
+
+// 2) 删除 双向链表中的 某个节点x（x 一定存在）
+DobuleList.prototype._remove = function(x){
+    x.prev.next = x.next;
+    x.next.prev = x.prev;
+
+    // 节点个数 -1
+    this.size--;
+}
