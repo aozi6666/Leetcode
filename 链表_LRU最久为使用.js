@@ -116,7 +116,7 @@ LRUCache.prototype._makeRecently = function(key){
     this.cache._addLast(x);
 }
 
-// 添加 新节点 到尾部
+// 2)添加 新节点 到尾部
 LRUCache.prototype._addRecently = function(key, value){
     // 新建一个节点
     const x = new Node(key, value);
@@ -124,4 +124,14 @@ LRUCache.prototype._addRecently = function(key, value){
     this.cache._addLast(x);
     // (重要)添加到 map 中
     this.map.set(key, x);
+}
+
+// 3) 删除某个节点
+LRUCache.prototype.deleteKey = function(key) {
+    // 获取该节点（从map中）
+    const x = this.map.get(key);
+    // 删除该节点
+    this.cache._remove(x);
+    // 删除 map 中的 key
+    this.map.delete(key);
 }
