@@ -54,3 +54,17 @@ function DobuleList() {
     this.head.next = this.tail;
     this.tail.prev = this.head;
 }
+
+// 双向链表原型上的一些 增删改查 方法
+// 1) 双向链表 尾部（最新使用） 添加节点 x，时间 O(1)
+DobuleList.prototype._addLast = function(x) {
+    x.prev = this.tail.prev;
+    x.next = this.tail;
+
+    // 之前的尾节点指向 x
+    this.tail.prev.next = x;
+    this.tail.prev = x;
+
+    // 节点个数 +1
+    this.size++;
+}
