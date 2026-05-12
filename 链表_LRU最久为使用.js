@@ -88,3 +88,7 @@ DobuleList.prototype._removeFirst = function(){
     this._remove(first);  // 调用 删除方法
     return first;
 }
+// 4) 返回链表长度
+DobuleList.protitype.getSize = function() {
+    return this.size;
+}
