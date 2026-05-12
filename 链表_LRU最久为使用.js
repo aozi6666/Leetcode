@@ -143,3 +143,18 @@ LRUCache.prototype._removeLeastRecently = function(){
     // 删除 map 中的 key
     this.map.delete(deleteNode.key);
 }
+
+
+// 实现 LRU 的 get/put 方法
+LRUCache.prototype.get = function(key, value) {
+    // map 中不存在 key
+    if(!this.map.get(key)){
+        return -1;
+    }
+
+    // 每次访问完，将改节点变为最近使用
+    this._makeRecently(key);
+
+    // 返回该节点的值
+    return this.map.get(key).value;
+}
