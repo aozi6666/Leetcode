@@ -2,6 +2,8 @@
 // get/put 均摊 O(1)
 // 请你设计并实现一个满足  LRU (最近未使用) 缓存 约束的数据结构
 
+const { DoubleSide } = require("three");
+
 // 实现 LRUCache 类：
 // LRUCache(int capacity) 以 正整数 作为容量 capacity 初始化 LRU 缓存
 // int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1
@@ -89,6 +91,26 @@ DobuleList.prototype._removeFirst = function(){
     return first;
 }
 // 4) 返回链表长度
-DobuleList.protitype.getSize = function() {
+DobuleList.protitype._getSize = function() {
     return this.size;
+}
+
+// LRUCache 数据结构
+function LRUCache(capacity){
+    // 用 map 存 key -> node
+    this.map = new Map();
+    // 新建一个双向链表
+    this.cache = new DobuleList();
+    // 容量
+    this.cap = capacity;
+}
+
+//  LRUCache 方法
+//  1) 变为最近使用的节点
+LRUCache.prototype._makeRecently = function(key){
+    let x = this.map.get(key);
+    // 先从链表中 删除这个节点
+    this.cache._remove(x);
+    // 将该节点再加入到链表的尾部（最近使用）
+    this.cache._addLast(x);
 }
