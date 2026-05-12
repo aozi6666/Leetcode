@@ -33,96 +33,24 @@
 // lRUCache.get(4);    // 返回 4
 
 
-// Node节点定义类
-class Node {
-    // 构造函数：初始化这个对象的属性(键值对 + 元素前后指针)
-    constructor(key = 0, value = 0) {
-        this.key = key;
-        this.value = value;
-        this.prev = null;
-        this.next = null;
-    }
-};
-
-// LRUCache类定义
-class LRUCache {
-    // 构造函数：初始化这个对象的属性(容量 + 双向链表)
-    constructor(capactity) {
-        this.capactity = capactity;  // 容量
-        // 哈希表：key 为 键，value 为 节点Node对象
-        this.map = new Map();
-
-        // 双向链表：指向 LRU容器内，头节点 尾节点
-        // 哨兵节点： head <-> ... <-> tail
-        this.head = new Node();  // 头节点: head.next 指向 "最近使用" 节点
-        this.tail = new Node();  // 尾节点: tail.prev 指向 "最久未使用" 节点
-
-        // 初始化链表：头尾节点 相互指向
-        this.head.next = this.tail;
-        this.tail.prve = this.head;
-    }
-};
-
-// 原型方法： _remove（）把 节点Node 从链表中摘掉
-LRUCache.prototype._remove = function(node) {
-    node.prve.next = node.next;
-    node.next.prve = node.prve;
-    node.prve = null;
-    node.next = null;
-};
-
-// 原型方法： _addToFront（）把 节点Node 插到 head 后面（变成最近使用）
-LRUCache.prototype._addToFront = function(node) {
-    node.prve = this.head;
-    node.next = this.head.next;
-    this.head.next.prve = node;
-    this.head.next = node;
-};
-
-// 原型方法：  _moveToFront（）把 node 移到最前（最近使用）
-LRUCache.prototype._moveToFront = function(node) {
-    this._remove(node);  // 先摘掉
-    this._addToFront(node);  // 再插到最前
-};
-
-// 原型方法：_popLRU（）把 最久未使用 节点 摘掉
-LRUCache.prototype._popLRU = function() {
-    const last = this.tail.prev;  // 获取 最后一个节点（最久未使用）
-    this._remove(last);  // 摘掉
-    return last;  // 返回 最久未使用 节点 （供哈希表删除）
-};
-
-// 原型方法：get（）获取LRU缓存中的值
-LRUCache.prototype.get = function(key) {
-    // 如果 key 不存在，返回 -1
-    if(!this.map.has(key)) return -1;
-
-    // 如何存在该节点，获取
-    const node = this.map.get(key);
-    // 把该节点 移到最前（最近使用）
-    this._moveToFront(node);
-    // 返回该节点的值
-    return node.value;
+// 双向链表数据结构
+// 双向链表中的某个节点
+function Node(key, value){
+    this.key = key;
+    this.value = value;
+    this.prev = null;
+    this.next = null;
 }
 
-// 原型方法：put（）插入LRU缓存中
-LRUCache.prototype.put = function(key, value) {
-    // 如果 key 已经存在，更新值 + 移动到最前
-    if(this.map.has(key)) {
-        const node = this.map.get(key);
-        node.value = value;
-        this._moveToFront(ndoe);
-        return;
-    }
+function DobuleList() {
+    // 虚拟节点（头 + 尾）
+    this.head = new Node(0, 0);
+    this.tail = new Node(0, 0);
 
-    // 如果 key 不存在，创建新节点 +  更新哈希表 + 插入到最前
-    const node = new Node(key, value);
-    this.map.set(key, value);
-    this._addToFront(node);
+    // 双向链表的节点个数
+    this.size = 0;
 
-    // 如果容量超过，摘掉最久未使用 节点 + 从哈希表中删除
-    if(this.map.size > this.capactity) {
-        const lastLru = this._popLRU();
-        this.map.delete(lastLru.key);
-    }
+    // 初始化(头尾相连)
+    this.head.next = this.tail;
+    this.tail.prev = this.head;
 }
