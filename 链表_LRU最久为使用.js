@@ -77,3 +77,14 @@ DobuleList.prototype._remove = function(x){
     // 节点个数 -1
     this.size--;
 }
+// 3) 删除 双向链表的 头节点第一个节点（最近未被使用），并返回该节点，时间 O(1)
+DobuleList.prototype._removeFirst = function(){
+    // 边界判断：空链表，返回null
+    if(this.head.next === this.tail){
+        return null;
+    }
+
+    const first = this.head.next;
+    this._remove(first);  // 调用 删除方法
+    return first;
+}
