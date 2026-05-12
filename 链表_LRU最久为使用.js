@@ -108,9 +108,12 @@ function LRUCache(capacity){
 //  LRUCache 方法
 //  1) 变为最近使用的节点
 LRUCache.prototype._makeRecently = function(key){
+    // 获取节点（从map中）
     let x = this.map.get(key);
     // 先从链表中 删除这个节点
     this.cache._remove(x);
     // 将该节点再加入到链表的尾部（最近使用）
     this.cache._addLast(x);
 }
+
+// 
