@@ -24,6 +24,7 @@ function checkType(type, value) {
     // 把 value 的真实类型，变成一个固定格式的字符串
     return Object.prototype.toString.call(value) === `[object ${type}]`;
 }   
+checkType.length === 2   // true : 函数.length 函数形参的数量
 // 正常用法：
 checkType("String", "hello");
 checkType("Array", []);
@@ -44,12 +45,13 @@ function curry(fn) {
     // 返回一个新函数，用来接收后续参数
     return function curried(...args) {
       // 如果当前收集到的参数个数已经够了 fn.length === 原函数形参的个数
+      // 函数.length === 函数“形参”的数量
       if (args.length >= fn.length) {
         // 直接执行原函数
         return fn.apply(this, args);
       }
   
-      // 参数不够，就继续返回一个函数收集参数
+      // 参数不够，继续返回一个函数，收集参数
       return function (...nextArgs) {
         // 把上一次的参数和这一次的参数合并起来
         return curried.apply(this, args.concat(nextArgs));
