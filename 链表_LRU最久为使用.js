@@ -158,3 +158,23 @@ LRUCache.prototype.get = function(key, value) {
     // 返回该节点的值
     return this.map.get(key).value;
 }
+
+LRUCache.prototype.put = function(key, value){
+    // 情况1: 原map中有key，再次put修改值，并标记为最近使用
+    if(this.map.has(key)){
+        // 删除旧的节点
+        this.deleteKey(key);
+        // 添加新的节点,到尾部
+        this._addRecently(key, value);
+        return;
+    }
+
+    // 情况2: 容量已满，删除最久未使用的节点
+    if(this.cap === this.cache._getSize()){
+        // 删除最久未使用的节点
+        this._removeLeastRecently();
+    }
+
+    // 情况3: 添加新的节点,到尾部
+    this._addRecently(key, value);
+}
