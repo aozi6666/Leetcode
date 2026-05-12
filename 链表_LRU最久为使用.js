@@ -135,3 +135,11 @@ LRUCache.prototype.deleteKey = function(key) {
     // 删除 map 中的 key
     this.map.delete(key);
 }
+
+// 4) 删除 最久未使用的节点
+LRUCache.prototype._removeLeastRecently = function(){
+    // 获得并删除链表头部 （最久未使用的节点）
+    const deleteNode = this.cache._removeFirst();
+    // 删除 map 中的 key
+    this.map.delete(deleteNode.key);
+}
