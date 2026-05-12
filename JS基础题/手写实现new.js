@@ -12,6 +12,9 @@ function myNew(Constructor, ...args) {
     const obj = Object.create(Constructor.prototype);
   
     // 2. 执行构造函数，并把 this 绑定到新对象上
+    // Constructor构造器函数：就是函数
+    //             - 无返回：result = undefined
+    //             - 返回对象：result = 对象
     const result = Constructor.apply(obj, args);
   
     // 3. 如果构造函数返回的是对象，就返回这个对象
