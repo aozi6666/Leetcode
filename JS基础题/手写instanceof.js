@@ -21,7 +21,7 @@ function myInstanceof(left, right) {
   const prototype = right.prototype;
 
   // 3. 从左边对象的 __proto__ 开始找
-  Object.getPrototypeOf(left)  // 更规范
+  // Object.getPrototypeOf(left)  // 更规范
   let proto = left.__proto__;
 
   // 4. 顺着原型链一直往上找
