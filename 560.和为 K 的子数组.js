@@ -30,7 +30,16 @@ var subarraySum = function(nums, k) {
     for(let num of nums){
         // 前缀和
         sum += num;
-    }
+
+        // 
+        if(map.has(sum - k)){
+            count += map.get(sum - k);
+        }
+        // 存进map
+        map.set(sum, (map.get(sum) || 0) + 1);
+    }   
+
+    return count;
 
 };
 // @lc code=end
