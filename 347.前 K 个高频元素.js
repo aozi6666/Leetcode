@@ -19,9 +19,7 @@ var topKFrequent = function(nums, k) {
 
     // 遍历数组，统计每个元素出现频率
     for (const num of nums) {
-
-        // 如果当前数字已经存在，则次数 +1
-        // 如果不存在，则初始化为 0 后再 +1
+        // 更新map
         freqMap.set(num, (freqMap.get(num) || 0) + 1);
     }
 
@@ -36,8 +34,7 @@ var topKFrequent = function(nums, k) {
     // b[1] - a[1] 表示从大到小
     entries.sort((a, b) => b[1] - a[1]);
 
-    // 截取前 k 个元素
-    // slice(0, k) 取前 k 项
+    // 截取前 k 个元素,  slice(0, k) 取前 k 项
     const topK = entries.slice(0, k);
 
     // 只返回数字本身
