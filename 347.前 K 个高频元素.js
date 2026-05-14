@@ -13,9 +13,8 @@
  */
 var topKFrequent = function(nums, k) {
     // 哈希表 + 堆/排序
-     // 创建一个 Map 用来统计元素出现次数
-    // key: 数字
-    // value: 出现次数
+    // 创建一个 Map 用来统计元素出现次数
+    // key: 数字， value: 出现次数
     const freqMap = new Map();
 
     // 遍历数组，统计每个元素出现频率
