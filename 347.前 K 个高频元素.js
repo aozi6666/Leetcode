@@ -10,6 +10,10 @@
  * @param {number[]} nums
  * @param {number} k
  * @return {number[]}
+ * 
+ * Map.entries(): 得到 Map 里的所有键值对
+ *          - 返回一个 Iterator（可迭代对象） [1, 3] [2, 2] [3, 1]
+ *          - Array.from()：把“可迭代对象”转成 真正 二维数组
  */
 var topKFrequent = function(nums, k) {
     // 哈希表 + 堆/排序
@@ -26,8 +30,7 @@ var topKFrequent = function(nums, k) {
     // 将 Map 转成数组
     // 例如：
     // Map(3) {1 => 3, 2 => 2, 3 => 1}
-    // 转成：
-    // [[1,3], [2,2], [3,1]]
+    // 转成：[[1,3], [2,2], [3,1]]
     const entries = Array.from(freqMap.entries());
 
     // 按照出现次数进行降序排序
