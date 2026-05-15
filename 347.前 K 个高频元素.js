@@ -38,6 +38,7 @@ var topKFrequent = function(nums, k) {
     entries.sort((a, b) => b[1] - a[1]);
 
     // 截取前 k 个元素,  slice(0, k) 取前 k 项
+    // slice(0, 2)：从索引0开始，截取到索引2之前 👉 不包含 2 
     const topK = entries.slice(0, k);
 
     // 只返回数字本身
