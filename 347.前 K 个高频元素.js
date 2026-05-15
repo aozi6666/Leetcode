@@ -42,8 +42,9 @@ var topKFrequent = function(nums, k) {
     const topK = entries.slice(0, k);
 
     // 只返回数字本身
-    // 每项格式为 [数字, 次数]
-    // entry[0] 就是数字
+    // 每项格式为 [数字, 次数] entry[0] 是数字
+
+    // 数组.map()方法：遍历数组，对每一项加工，返回新数组
     return topK.map(entry => entry[0]);
 };
 // @lc code=end
