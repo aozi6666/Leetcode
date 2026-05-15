@@ -14,6 +14,13 @@
  * Map.entries(): 得到 Map 里的所有键值对
  *          - 返回一个 Iterator（可迭代对象） [1, 3] [2, 2] [3, 1]
  *          - Array.from()：把“可迭代对象”转成 真正 二维数组
+ * 
+ * 解题思路：
+ * Map统计频率
+    → 转二维数组
+    → 按第二个字段排序
+    → 取前k个
+    → 只返回数字
  */
 var topKFrequent = function(nums, k) {
     // 哈希表 + 堆/排序
