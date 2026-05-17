@@ -5,7 +5,7 @@
         return acc;
     }, [初始值])
 
-    indexOf(cur): 找到第一个等于cur的索引，找不到返回-1
+    数组方法: indexOf(cur): 查找某个元素cur在数组中第一次出现的位置索引，找不到返回-1
 */ 
 
 const arr = [1, 2, 3, 2, 1];
