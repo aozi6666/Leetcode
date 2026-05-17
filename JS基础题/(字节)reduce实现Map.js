@@ -22,9 +22,11 @@
     结果：[2, 4, 6]
 */
 
-function myMap(arr, fn){
+const { attenuationColor } = require("three/tsl");
+
+function myMap(arr, fn, thisArg){
     return arr.reduce(function(acc, cur, index, array){
-        acc.push[fn(cur, index, array)];
+        acc.push[fn.call(thisArg, cur, index, array)];
         return acc;
     }, []);
 }
