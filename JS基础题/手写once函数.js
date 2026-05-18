@@ -2,15 +2,20 @@
 // 核心就是：闭包保存一个标记变量，判断函数有没有执行过
 function once(fn) {
     // 标记变量：记录函数是否执行过
-    var called = false;
-    var result;
-  
+    let called = false;
+    let result;
+    
+    // 返回一个函数
     return function() {
+      //函数没有执行过，更改状态，执行函数
       if (!called) {
+        // 更改状态
         called = true;
+        // 执行函数
         result = fn.apply(this, arguments);
       }
-  
+
+      // 函数执行过，直接返回结果
       return result;
     };
   }
