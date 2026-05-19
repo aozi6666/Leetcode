@@ -43,3 +43,23 @@ function set(obj, keyPaths, value){
 
     return obj;
 }
+
+// 方式2:reduce 版本
+function set(obj, keyPaths, value){
+    keyPaths.reduce((acc, cur, index) => {
+        // 到达最后一个 key
+        if(index === keyPaths.length - 1){
+            // 赋值
+            acc[cur] = value;
+        } else {
+            // 创建一个空对象
+            if (acc[cur] === undefined || acc[cur] === null) {
+                acc[cur] = {};
+            }
+        }
+        // 返回下一层对象
+        return acc[cur];
+    }, obj);
+
+    return obj;
+}
