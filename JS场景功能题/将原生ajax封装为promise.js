@@ -86,12 +86,14 @@ function ajax(url, method, data){
         if(methodType === 'GET' && data){
             // 数组，用来存参数
             const query = [];
-
+            // for...in 取属性名
             for(let key in data){
                 query.push(
-                    `${key}=${encodeURIComponent(data[key])}`
+                    // 从  id: 1, 拼出 id=1
+                    `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`
                 );
             }
+            // 把参数拼到 URL 中
             url += url.indexOf("?") === -1 
                 ? "?" + query.join("&") 
                 : "&" + query.join("&");
@@ -117,7 +119,7 @@ function ajax(url, method, data){
         }
 
        // 4. 发送请求 （分为POST/GET）
-        if(method === 'POST'){
+        if(methodType === 'POST'){
             // 如果是 POST 请求，需要设置请求头
             // application/json: 请求体是 JSON 格式
             xhr.setRequestHeader(
