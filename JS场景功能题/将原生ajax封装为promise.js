@@ -123,3 +123,26 @@ function ajax(url, method, data){
         }
     })
 }
+
+// GET 调用示例
+ajax("https://jsonplaceholder.typicode.com/posts/1", "GET")
+  .then(function (res) {
+    console.log("成功：", res);
+  })
+  .catch(function (err) {
+    console.log("失败：", err);
+  });
+
+// POST 调用示例
+ajax("https://jsonplaceholder.typicode.com/posts", "POST", {
+    title: "hello",
+    body: "world",
+    userId: 1
+  })
+    .then(function (res) {
+      console.log("成功：", res);
+    })
+    .catch(function (err) {
+      console.log("失败：", err);
+    });
+  
