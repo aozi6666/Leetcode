@@ -23,30 +23,16 @@ xhr.onreadystatechange = function () {
         // status：HTTP 状态码, 2xx请求成功
         if(xhr.status >= 200 && xhr.status < 300){
             // responseText：服务器返回的数据
-            resolve(xhr.responseText);
+            console.log(xhr.responseText);
         } else {
             // 请求失败
-            reject(new Error(xhr.statusText));
+            console.log('请求失败');
         }
     }
 }
 
-// 监听网络错误
-xhr.onerror = function () {
-    reject(new Error('网络错误'));
-}
-
-// 4. 发送请求 （分为POST/GET）
-if(method === 'POST'){
-    // 如果是 POST 请求，需要设置请求头
-    xhr.setRequestHeader('Content-Type', 'application/json;ccharset=utf-8' )
-
-    // POST 请求，参数放在请求体里
-    xhr.send(JSON.stringify(data))
-} else {
-    // GET 请求，参数已经拼到 url 后面了
-    xhr.send();
-}
+// 4. 发送请求 
+xhr.send();
 
 // 原生 Ajax: 用 XMLHttpRequest 封装一个方法
 // 只能在回调里拿结果，不方便链式调用
@@ -112,13 +98,28 @@ function ajax(url, method, data){
         xhr.onreadystatechange = function () {
             if(xhr.readyState === 4) {
                 if(xhr.status >= 200 && xhr.status < 300){
-                    console.log(xhr.responseText);
+                    resolve(xhr.responseText);
                 } else {
-                    console.log('请求失败');
+                    reject(new Error(xhr.statusText));
                 }
             }
         }
-        // 4. 发送请求
-        xhr.send();
+
+        // 监听网络错误
+        xhr.onerror = function () {
+            reject(new Error('网络错误'));
+        }
+
+       // 4. 发送请求 （分为POST/GET）
+        if(method === 'POST'){
+            // 如果是 POST 请求，需要设置请求头
+            xhr.setRequestHeader('Content-Type', 'application/json;ccharset=utf-8' )
+
+            // POST 请求，参数放在请求体里
+            xhr.send(JSON.stringify(data))
+        } else {
+            // GET 请求，参数已经拼到 url 后面了
+            xhr.send();
+        }
     })
 }
