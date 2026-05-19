@@ -32,7 +32,7 @@ function set(obj, keyPaths, value){
             cur[key] = value;
         } else {
             // 如果下一层不存在，先创建一个空对象
-            if (cur[key] === undefined || cur[key] === null) {
+            if (cur[key] === undefined || cur[key] === null || typeof acc[cur] !== 'object') {
                 cur[key] = {};
             }
 
@@ -53,7 +53,7 @@ function set(obj, keyPaths, value){
             acc[cur] = value;
         } else {
             // 创建一个空对象
-            if (acc[cur] === undefined || acc[cur] === null) {
+            if (acc[cur] === undefined || acc[cur] === null || typeof acc[cur] !== 'object') {
                 acc[cur] = {};
             }
         }
