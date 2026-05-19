@@ -66,33 +66,39 @@ ajax("https://jsonplaceholder.typicode.com/posts/1");
 
 
 // 原生 ajax 封装成 Promise
+// GET 请求里，data 会被拼到 URL 后面
+// POST请求里 data 会放到请求体 body 里
 
 function ajax(url, method, data){
     // 设置method默认值
-   const mothod = method || 'GET';
+   let methodType  = method || 'GET';
 
     // 统一转成大写，避免 get / post 这种小写影响判断
-    mothod = method.toUpperCase();
+    methodType  = methodType.toUpperCase();
 
     // 返回一个Promise
     return new Promise((resolve, reject) => {
         // 1. 创建 XMLHttpRequest 对象
         const xhr = new XMLHttpRequest();
 
-        // GET请求的参数处理
-        if(method === 'GET' && data){
-            const qurey = [];
+        // GET请求的参数处理: GET 请求里，data 会被拼到 URL 后面
+        // 把对象 data 转成 URL 查询参数
+        if(methodType === 'GET' && data){
+            // 数组，用来存参数
+            const query = [];
 
             for(let key in data){
-                qurey.push(
+                query.push(
                     `${key}=${encodeURIComponent(data[key])}`
                 );
             }
-            url += url.indexOf("?") === -1 ? "?" + query.join("&") : "&" + query.join("&");
+            url += url.indexOf("?") === -1 
+                ? "?" + query.join("&") 
+                : "&" + query.join("&");
         }
 
         // 2. 初始化请求
-        xhr.open(mothod, url, true);
+        xhr.open(methodType, url, true);
 
         // 3.监听请求变化
         xhr.onreadystatechange = function () {
@@ -113,9 +119,14 @@ function ajax(url, method, data){
        // 4. 发送请求 （分为POST/GET）
         if(method === 'POST'){
             // 如果是 POST 请求，需要设置请求头
-            xhr.setRequestHeader('Content-Type', 'application/json;ccharset=utf-8' )
+            // application/json: 请求体是 JSON 格式
+            xhr.setRequestHeader(
+                'Content-Type', 
+                'application/json;charset=utf-8' 
+            )
 
-            // POST 请求，参数放在请求体里
+            // POST 请求，参数data放在请求体里
+            // JSON.stringify()： JS 对象转成 JSON 字符串
             xhr.send(JSON.stringify(data))
         } else {
             // GET 请求，参数已经拼到 url 后面了
@@ -125,7 +136,8 @@ function ajax(url, method, data){
 }
 
 // GET 调用示例
-ajax("https://jsonplaceholder.typicode.com/posts/1", "GET")
+// https://jsonplaceholder.typicode.com/posts/1?id=1&page=2
+ajax("https://jsonplaceholder.typicode.com/posts/1", "GET", { id: 1, page: 2 })
   .then(function (res) {
     console.log("成功：", res);
   })
