@@ -15,7 +15,6 @@
             - value
             - next
             - prev
-        
 
 
     4. 放两个虚拟节点 在双向链表头部和尾部
@@ -24,24 +23,23 @@
 /**
  * @param {number} capacity
  */
+
+// 双向链表节点
+function ListNode(key = 0, value = 0) {
+    this.key = key;
+    this.value = value;
+    this.prev = null;
+    this.next = null;
+}
+
+// 构造函数（里面都用this）
 var LRUCache = function(capacity) {
     this.capacity = capacity;
     this.map = new Map();
 
     // 虚拟头尾节点，避免处理空链表、头尾边界
-    this.head = {
-        key: null,
-        value: null,
-        prev: null,
-        next: null
-    };
-
-    this.tail = {
-        key: null,
-        value: null,
-        prev: null,
-        next: null
-    };
+    this.head = new ListNode();
+    this.tail = new ListNode();
 
     this.head.next = this.tail;
     this.tail.prev = this.head;
@@ -122,12 +120,7 @@ LRUCache.prototype.put = function(key, value) {
         this.map.delete(leastUsedNode.key);
     }
 
-    const newNode = {
-        key: key,
-        value: value,
-        prev: null,
-        next: null
-    };
+    const newNode = new ListNode(key, value);
 
     this.map.set(key, newNode);
     this.addToHead(newNode);
