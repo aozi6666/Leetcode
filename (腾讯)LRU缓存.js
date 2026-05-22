@@ -30,15 +30,15 @@ var LRUCache = function(capacity) {
 
     // 虚拟头尾节点，避免处理空链表、头尾边界
     this.head = {
-        key: 0,
-        value: 0,
+        key: null,
+        value: null,
         prev: null,
         next: null
     };
 
     this.tail = {
-        key: 0,
-        value: 0,
+        key: null,
+        value: null,
         prev: null,
         next: null
     };
@@ -114,6 +114,14 @@ LRUCache.prototype.put = function(key, value) {
         return;
     }
 
+    // 先淘汰最久未使用的节点，避免链表瞬时超出容量
+    if (this.map.size === this.capacity) {
+        const leastUsedNode = this.tail.prev;
+
+        this.removeNode(leastUsedNode);
+        this.map.delete(leastUsedNode.key);
+    }
+
     const newNode = {
         key: key,
         value: value,
@@ -123,12 +131,4 @@ LRUCache.prototype.put = function(key, value) {
 
     this.map.set(key, newNode);
     this.addToHead(newNode);
-
-    if (this.map.size > this.capacity) {
-        // tail.prev 是最久未使用的节点
-        const leastUsedNode = this.tail.prev;
-
-        this.removeNode(leastUsedNode);
-        this.map.delete(leastUsedNode.key);
-    }
 };
