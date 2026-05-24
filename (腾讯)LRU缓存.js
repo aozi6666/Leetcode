@@ -25,9 +25,9 @@
  */
 
 // 双向链表节点
-function ListNode(key = 0, value = 0) {
-    this.key = key;
-    this.value = value;
+function ListNode(key, value) {
+    this.key = key === undefined ? 0 : key;
+    this.value = value === undefined ? 0 : value;
     this.prev = null;
     this.next = null;
 }
