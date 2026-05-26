@@ -29,7 +29,10 @@ function addBigInt(num1, num2){
         // 竖式加法
         const sum = x + y + carry;
 
-        res.push(sum % 10);
+        // 当前位只能放一个数字：当前位留下 
+        res.push(sum % 10);  // 取个位数
+        
+        // 是否要向更高位进 1： 只有 0 或者 1
         carry = Math.floor(sum / 10);
 
         // 下一组
