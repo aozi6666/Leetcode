@@ -35,7 +35,7 @@ class EventEmitter {
         //   click: [fn1, fn2],
         //   login: [fn3]
         // }
-        this.events = {}
+        this.events = Object.create(null)
     }
 
     // 1. 订阅事件：
@@ -56,7 +56,7 @@ class EventEmitter {
         const handlers = this.events[event];
 
         // 这个事件没人订阅，直接结束
-        if(!handlers) return;
+        if(!handlers || handlers.length === 0) return;
 
         // 找到要删除的那个函数的位置
         // indexOf(): 获取 某个元素 在数组中的索引
@@ -75,7 +75,7 @@ class EventEmitter {
         const handlers = this.events[event];
 
         // 没订阅这个事件，直接结束
-        if(!handlers) return;
+        if(!handlers || handlers.length === 0) return;
 
         // 执行前：先拷贝
         // 避免执行过程中有人 修改/取消订阅，影响原数组
