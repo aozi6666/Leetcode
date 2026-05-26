@@ -7,6 +7,7 @@
 */
 
 function addBigInt(num1, num2){
+    // 解题思路：双指针 + 进位
     // 1. 转为字符串
     num1 = String(num1);
     num2 = String(num2);
