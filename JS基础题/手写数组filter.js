@@ -13,8 +13,15 @@ Array.prototype.filter = function(fn){
 
     // 循环
     for(let i = 0; i < initArr.length; i++){
-        
+        // 调用传进来的判断函数 fn()
+        // fn.call(this, 当前元素, 当前索引下标, 原数组本身)
+        if(fn.call(this, initArr[i], i, initArr)){
+            // 如果 fn 返回 true，就把当前元素放进结果数组
+            result.push(initArr[i]);
+        }
     }
+
+    return result;
 
 }
 
@@ -24,7 +31,7 @@ Array.prototype.myFilter = function(fn){
     const initArr = this;
 
     return initArr.reduce((acc, cur, index, arr) => {
-        if(fn(cur, index, arr)){
+        if(fn.call(this, cur, index, arr)){
             // 满足条件
             acc.push(cur);
         }
