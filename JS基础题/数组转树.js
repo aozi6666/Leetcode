@@ -76,7 +76,7 @@ function arrayToTree(arr) {
 
         //  如果存在父节点
         if(parentNode) {
-            // 把当 前节点 放进父节点的 children 里
+            // 把 当前节点 放进父节点的 children 里
             parentNode.children.push(curNode);
         } else {
             // 如果不存在父节点(为根节点)，则把当前节点放进 roots

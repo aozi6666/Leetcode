@@ -71,7 +71,7 @@ class EventEmitter {
 
     // 3. 触发事件
     emit(event, ...args){
-        // 获取 当前事件 对应的 回调函数数组
+        // 获取 当前事件 对应的 回调函数数组（原数组的引用）
         const handlers = this.events[event];
 
         // 没订阅这个事件，直接结束
