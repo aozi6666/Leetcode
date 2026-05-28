@@ -47,9 +47,23 @@ function parseUrl(url){
             value = decodeURIComponent(value);
         }
 
-        // 8. 如果 key 已经存在，说明出现了重复参数,合并
+        // 8. 如果 key 已经存在(分第二次和更多次)，说明出现了重复参数,合并
         if(resObj.hasOwnProperty(key)){
-            
+            // 取出 key 对应的 旧value
+            const oldValue = resObj[key];
+
+            // 如果 旧value 已经是数组，直接push
+            if(Array.isArray(oldValue)){
+                oldValue.push(value);
+            } else {
+                // 旧value 不是数组(第二次出现)，就变成数组
+                oldValue.push(value);
+            }
+        } else {
+            // key 之前没出现过，存key-value
+            resObj[key] = value;
         }
     }
+
+    return resObj;
 }
