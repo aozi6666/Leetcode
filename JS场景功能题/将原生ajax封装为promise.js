@@ -160,3 +160,8 @@ ajax("https://jsonplaceholder.typicode.com/posts", "POST", {
       console.log("失败：", err);
     });
   
+
+// 原生Ajax 封装
+
+// 1. 创建 XMLHttpRequest 对象
+const xhr = new XMLHttpRequest
