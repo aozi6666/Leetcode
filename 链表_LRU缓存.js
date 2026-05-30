@@ -40,6 +40,7 @@ var LRUCache = function(capacity) {
     const map = new Map();
 
     // 初始化一个双向链表
+    // 虚拟 头/尾节点
     const head = new ListNode();
     const tail = new ListNode();
 
@@ -50,5 +51,23 @@ var LRUCache = function(capacity) {
 // 在构造函数上添加方法
 // 在链表头部 添加节点
 LRUCache.prototype.addToHead = function(node){
-    
+    node.prev = this.head;
+    node.next = this.head.next;
+
+    this.head.next.prev = node;
+    this.head.next = node;
+}
+
+// 删除一个节点
+LRUCache.prototype.removeNode = function(node){
+    const prevNode = node.prev;
+
+    prevNode.next = node.next;
+    node.next.prev = prevNode;
+}
+
+// 访问节点并移动到头部
+LRUCache.prototype.moveToHead = function(node){
+    this.removeNode(node);
+    this.addToHead(node);
 }
