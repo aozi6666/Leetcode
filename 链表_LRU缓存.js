@@ -87,3 +87,34 @@ LRUCache.prototype.get = function(key){
     // 返回节点值
     return node.value;
 }
+
+// 实现put
+LRUCache.prototype.put = function(key, value){
+    // 如果存在，更新，移动到头部
+    if(this.map.get(key)){
+        const node = this.map.get(key);
+
+        node.value = value;
+        this.moveToHead(node);
+
+        return;
+    }
+
+    // 不存在，创建新节点，添加到头部
+    // 创建新节点
+    const newNode = new ListNode(key, value);
+
+    // 当前已满(删除最后一个节点，并且更新map)
+    if(this.map.size === this.capacity){
+        const lastNode = this.tail.prev;
+
+        this.removeNode(lastNode);
+        this.map.delete(lastNode.key);
+    } 
+
+    // 添加到map
+    this.map.set(key, newNode);
+
+    // 添加到头部
+    this.addToHead(newNode);
+}
