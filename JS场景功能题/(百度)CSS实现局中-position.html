@@ -1,0 +1,51 @@
+<!-- 
+    CSS 居中： 使用 CSS 实现一个 div 的水平垂直居中
+-->
+
+
+<!-- 方案1 ： flex 布局 -->
+
+
+<html>
+    <head>
+        <title>CSS居中(Position + transform)</title>
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+            }
+
+            .parent{
+                width: 300px;
+                height: 300px;
+                background-color: skyblue;
+
+                /* 父元素：开启相对定位（相对于 该元素的原来位置） */
+                position: relative;
+            }
+            .child {
+                width: 200px;
+                height: 200px;
+                border: 1px solid #ccc;
+                background-color: pink;
+
+                /* 子元素：开启绝对定位（相对于 父元素的位置） */
+                position: absolute;
+
+                /* 子元素（左上角）放到 父元素中心 */
+                top: 50%;
+                left: 50%;
+
+                /* 借助 transform 移动自身的一半宽度和高度 到 中心*/
+                transform: translate(-50%, -50%);
+            }
+
+            
+        </style>
+    </head>
+    <body>
+        <div class="parent">
+            <div class="child"></div>
+        </div>
+    </body>
+</htmL>
