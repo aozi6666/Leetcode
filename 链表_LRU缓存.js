@@ -71,3 +71,19 @@ LRUCache.prototype.moveToHead = function(node){
     this.removeNode(node);
     this.addToHead(node);
 }
+
+// 实现get
+LRUCache.prototype.get = function(key){
+    if(!this.map.has(key)){
+        return -1;
+    }
+
+    // 取出对应的节点
+    const node = this.map.get(key);
+
+    // 移动到头部（最新使用）
+    this.moveToHead(node);
+
+    // 返回节点值
+    return node.value;
+}
