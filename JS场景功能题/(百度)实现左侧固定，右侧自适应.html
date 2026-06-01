@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"> 
+    <head>
+        <title></title>
+        <style>
+            *{
+                padding: 0;
+                margin: 0;
+            }
+
+            /* 父元素开启flex布局 */
+            .contain {
+                display: flex;
+            }
+            
+            .contain .left{
+                width: 200px;
+                height: 300px;
+                background-color: skyblue;
+            }
+
+            .contain .right{ 
+                background-color: pink;
+                
+                /* flex三个参数： grow shrink basis*/
+                flex: 1 1 0%;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="contain">
+            <div class="left">固定内容</div>
+            <div class="right">
+                自动内容
+            </div>
+        </div>
+    </body>
+</html>
