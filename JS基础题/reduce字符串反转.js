@@ -17,7 +17,7 @@ function splitReverse(str){
 function reduceReverse(str){
     // 字符串转数组
     strArr = Array.from(str);
-   return strArr.reduce(function(acc, cur){
+    return strArr.reduce(function(acc, cur){
     // 每轮拼接：【当前字符 - acc】
     return cur + acc;
    }, '')
