@@ -48,7 +48,7 @@ function parseUrl(url){
         }
 
         // 8. 如果 key 已经存在(分第二次和更多次)，说明出现了重复参数,合并
-        if(resObj.hasOwnProperty(key)){
+        if(Object.prototype.hasOwnProtrty.call(resObj, key)){
             // 取出 key 对应的 旧value
             const oldValue = resObj[key];
 
