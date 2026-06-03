@@ -33,22 +33,24 @@ function parseUrl(url){
     // 3. 用 & 分割每一组参数,得到结果数组["a=1", "b=2", "flag"]
     const queryArr = queryString.split("&"); 
 
+    let value;
+
     // 4. for...of...遍历每个参数
     for(const item of queryArr){
         // 5. 用  = 分割参数，得到 参数名key 和 参数值value
-        const [key, value] = item.split("=");
+        const [key, rawValue] = item.split("=");
 
         // 6. 如果 value 是 undefined,说明是参数没有值，当作true
-        if(value === undefined){
+        if(rawValue === undefined){
             value = true;
         } else {
             // 7. 如果 value 存在，就解码
             // hello%20world => hello world
-            value = decodeURIComponent(value);
+            value = decodeURIComponent(rawValue);
         }
 
         // 8. 如果 key 已经存在(分第二次和更多次)，说明出现了重复参数,合并
-        if(Object.prototype.hasOwnProtrty.call(resObj, key)){
+        if(Object.prototype.hasOwnProperty.call(resObj, key)){
             // 取出 key 对应的 旧value
             const oldValue = resObj[key];
 
@@ -57,7 +59,7 @@ function parseUrl(url){
                 oldValue.push(value);
             } else {
                 // 旧value 不是数组(第二次出现)，就变成数组
-                oldValue.push(value);
+                resObj[key] = [oldValue, value];
             }
         } else {
             // key 之前没出现过，存key-value
