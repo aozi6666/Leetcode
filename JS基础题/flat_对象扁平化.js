@@ -37,7 +37,9 @@ function objectFlat(obj = {}){
     function flatten(obj, preKey = ''){
         //  Object.entries(item) :把对象转成二维数组
         // 例如 { c: 1, d: 2 }  => [['c', 1], ['d', 2]]
-        Object.entries(obj).forEach((item) => {
+        const objArray = Object.entries(obj);
+
+        objArray.forEach((item) => {
             // 拿到 每个 key 与 value
             const key = item[0];
             const value = item[1];
