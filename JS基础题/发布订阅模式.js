@@ -74,6 +74,9 @@ class EventEmitter {
         // 获取 当前事件 对应的 回调函数数组（原数组的引用）
         const handlers = this.events[event];
 
+        // 防止this丢失
+        const context = this;
+
         // 没订阅这个事件，直接结束
         if(!handlers || handlers.length === 0) return;
 
@@ -81,7 +84,7 @@ class EventEmitter {
         // 避免执行过程中有人 修改/取消订阅，影响原数组
         // array.slice(start, end): 浅拷贝得到新数组，不包含end
         handlers.slice().forEach((fn) => {
-            fn.apply(this, args);
+            fn.apply(context, args);
         })
     }
 }
