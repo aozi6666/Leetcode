@@ -28,7 +28,7 @@ function objectFlat(obj = {}){
     //         遇到对象，带着 当前路径继续往里找
 
     // 最终结果
-    const res = {};
+    const res = Object.create(null);
     /**
      * 递归函数
      * @param {Object} item 当前正在处理的对象
