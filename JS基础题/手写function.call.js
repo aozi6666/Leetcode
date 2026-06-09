@@ -15,6 +15,8 @@
 
 */
 
+const { context } = require("three/examples/jsm/nodes/Nodes.js");
+
 /* 
  * 函数.call(对象, 参数1, 参数2, 参数3...)，参数为：
  *  - context对象:  你想把 this 改成指向谁 （对象）
@@ -59,3 +61,25 @@ Function.prototype.myCall = function (context, ...args) {
   }
   
   sayHi.myCall(obj, 20, "Shanghai");
+
+
+Function.prototype.myCall = function(context, ...args){
+  // 初始化对象
+  context = context == null ? window : Object(context);
+  // 拿到 原函数
+  const fn = this;
+
+  // 创建唯一的key
+  const key = new Symbol('fn');
+
+  // 挂到对象方法上
+  context[key] = fn;
+
+  // 执行
+  const result =  context[key](...args);
+
+  // 删除方法
+  delete context[key];
+
+  return result;
+}

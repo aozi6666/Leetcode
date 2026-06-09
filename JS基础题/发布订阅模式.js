@@ -26,6 +26,8 @@
     bus.emit('user')   // 再触发，已经不会执行了 张三 了
 */
 
+const { h } = require("vue");
+
 // 一个类/构造函数
 class EventEmitter {
     // 构造器函数
@@ -85,6 +87,50 @@ class EventEmitter {
         // array.slice(start, end): 浅拷贝得到新数组，不包含end
         handlers.slice().forEach((fn) => {
             fn.apply(context, args);
+        })
+    }
+}
+
+
+
+class EventEmitter {
+    // 构造器
+    constructor(){
+        // 对象
+        this.events = Object.create(null);
+    }
+
+    on(event, fn){
+        if(!this.events(event)){
+            this.events(event) = [];
+        }
+
+        this.events[event].push(fn);
+    }
+
+    off(event, fn){
+        const handlerArray = this.events[event];
+
+        if(!handlerArray || handlerArray.length === 0){
+            return;
+        }
+
+        const index = handlerArray.indexOf(fn);
+
+        if(index !== -1){
+            handlerArray.splice(index, 1);
+        }
+    }
+
+    emit(event, ...args){
+        const handlerArray = this.events[event];
+
+        if(handlerArray.length === 0 || !handlerArray){
+            return;
+        }
+
+        handlerArray.slice().forEach((fn) => {
+            fn.apply(this, args);
         })
     }
 }

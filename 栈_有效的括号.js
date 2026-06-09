@@ -39,8 +39,6 @@ var isValid = function(s) {
 };
 // @lc code=end
 
-
-
 /*
 // @lcpr case=start
 // "()"\n

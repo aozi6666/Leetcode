@@ -75,6 +75,49 @@ var removeNthFromEnd = function(head, n) {
 };
 // @lc code=end
 
+function ListNode(val){
+    this.val = val === undefined ? 0 : val;
+    this.next = next === undefined ? null : next; 
+}
+
+function removeNthFromEnd2(head, n){
+    // 解题思路：找到倒数第 k+1个节点，删除
+    if(head === null){
+        return;
+    }
+
+    // 创建虚拟头节点
+    const dummy = new ListNode(0);
+    dummy.next = head;
+
+
+    let indexNode = findK(dummy, n + 1);
+
+    // 删除
+    indexNode.next = indexNode.next.next;
+
+    return dummy.next;
+
+    function findK(head, k){
+        // 快慢指针
+        if(head === null) return null;
+
+        let p1 = head;
+
+        for(let i = 0; i < k; i++){
+            p1 = p1.next;
+        }
+
+        let p2 = head;
+
+        while(p1 !== null){
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+
+        return p2;
+    }
+}
 
 
 /*

@@ -35,3 +35,27 @@ function myInstanceof(left, right) {
   // 5. 找不到就返回 false
   return false;
 }
+
+function myInstanceof(left, right){
+  // 左侧基本数据类型，直接返回
+  if((typeof left !== 'object' && typeof left !== 'function') || left === null){
+    return false;
+  }
+
+  // 取右边对象的 prototype
+  const prototype = right[prototype];
+
+  // 取左边的 原型
+  const proto = left.__proto__;
+
+  while(proto != null){
+    if(proto === prototype){
+      return true;
+    }
+
+    proto = proto.__proto__;
+  }
+
+  return false;
+
+}

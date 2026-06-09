@@ -9,38 +9,25 @@ promise.all（异步结果）:
 
     参数：接收一个 可迭代对象，通常是数组
 */
-function myPromiseAll(promise) {
-  return new Promise((resolve, reject) => {
-    // 1. 判断参数，必须为数组
-    if(!Array.isArray(promise)){
-      reject(new TypeError('参数必须是数组'));
-    }
+function promiseAll(promises){
+  // 返回一个Promise
+  return Promise((reslove, reject) => {
+    let res = [];
+    let completeSum = 0;
 
-    // 2. 空值判断
-    if(promise.length === 0) {
-      resolve([]);
+    if(promises.length === 0){
+      reslove([]);
       return;
     }
 
-    // 3. 初始化
-    // 创建结果数组
-    const result = [];
-    // 记录成功个数
-    let completedCount = 0;
-
-    // forEach遍历传来的每一项
-    promise.forEach((item, index) => {
-      // 每一项的 promise/普通数字/字符串/布尔值 都要 变成 Promise 来统一处理
+    // 遍历
+    promises.forEach((item, index) => {
       Promise.resolve(item)
         .then((value) => {
-          // 按索引 存结果（保证顺序），不用push
-          result[index] = value;
-          // 每成功一个就加一
-          completedCount++;
-
-          // 成功个数等于传来数组的总长度，视为成功
-          if(completedCount === promise.length){
-            resolve(result);
+          res[index] = value;
+          completeSum++;
+          if(promises.length === completeSum){
+            reslove(res);
           }
         })
         .catch((err) => {
@@ -49,16 +36,3 @@ function myPromiseAll(promise) {
     })
   })
 }
-  
-// 测试
-  const p1 = Promise.resolve(1);
-  const p2 = new Promise((resolve) => setTimeout(() => resolve(2), 500));
-  const p3 = 3;
-  
-  myPromiseAll([p1, p2, p3])
-    .then((res) => {
-      console.log(res); // [1, 2, 3]
-    })
-    .catch((err) => {
-      console.error(err);
-    });

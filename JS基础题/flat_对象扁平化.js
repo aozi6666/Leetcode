@@ -64,3 +64,35 @@ function objectFlat(obj = {}){
     // 返回结果
     return res;
 }
+
+function objFlatten(obj = {}){
+  // 初始化
+  const tarObj = Object.create(null);
+
+  function flatten(obj, preKey = ''){
+    // 将 对象转为二维数组 Object.entries()
+    // {a: 1, b: 2} => [[a, 1], [b, 2]]
+    const objArr = Object.entries(obj);
+
+    // 遍历
+    objArr.forEach((item) => {
+      const key = item[0];
+      const value = item[1];
+      // 拼接key
+      const newKey = preKey ? `${prekey}.${key}` : key;
+
+      if(typeof value === 'object' && value !== null && Array.isArray(value)){
+        // 递归
+        flatten(value, newKey);
+      } else {
+        tarObj[newKey] = value;
+      }
+    })
+    
+  }
+
+  // 递归调用flatten
+  flatten(tarObj);
+
+  return tarObj;
+}
