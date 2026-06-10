@@ -71,3 +71,18 @@ function curry(fn) {
   console.log(curriedAdd(1, 2)(3));  // 6
   console.log(curriedAdd(1)(2, 3));  // 6
   
+
+function cuury(fn){
+  // 返回一个函数：继续接收参数
+  return function curried(fn, ...args){
+    if(fn.size >= args.length){
+      // 执行
+      fn.apply(this, args);
+    }
+
+    // 返回函数
+    return function(...nextArgs){
+      return curried.apply(this, args.concat(nextArgs));
+    }
+  }
+}

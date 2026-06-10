@@ -65,34 +65,36 @@ function objectFlat(obj = {}){
     return res;
 }
 
-function objFlatten(obj = {}){
-  // 初始化
-  const tarObj = Object.create(null);
+
+function flattenObj(obj = {}){
+  // 解题思路
+  const reslutObj = Object.create(null);
 
   function flatten(obj, preKey = ''){
-    // 将 对象转为二维数组 Object.entries()
-    // {a: 1, b: 2} => [[a, 1], [b, 2]]
-    const objArr = Object.entries(obj);
+    // 对象转为二维数组
+    const objArray = Object.entries(obj);
 
     // 遍历
-    objArr.forEach((item) => {
+    objArray.forEach((item) => {
       const key = item[0];
       const value = item[1];
-      // 拼接key
-      const newKey = preKey ? `${prekey}.${key}` : key;
 
-      if(typeof value === 'object' && value !== null && Array.isArray(value)){
-        // 递归
+      // 新路径
+      const newKey = preKey ? `${preKey}.{key}` : key;
+
+      if(typeof value === 'object' && value !== null && !Array.isArray(value)){
+        // 遍历
         flatten(value, newKey);
       } else {
-        tarObj[newKey] = value;
+        reslutObj[newKey] = value;
       }
+ 
+
     })
-    
   }
 
-  // 递归调用flatten
-  flatten(tarObj);
+  // 调用，flatten
+  flatten(obj, preKey = '');
 
-  return tarObj;
+  return reslutObj;
 }

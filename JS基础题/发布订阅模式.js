@@ -93,43 +93,36 @@ class EventEmitter {
 
 
 
-class EventEmitter {
-    // 构造器
+// 
+class EventEmitter{
     constructor(){
         // 对象
-        this.events = Object.create(null);
+        this.evnets = Object.create(null);
     }
 
     on(event, fn){
-        if(!this.events(event)){
-            this.events(event) = [];
-        }
+        if(!this.evnets[event]){
+            this.evnets[event] = [];
+        }   
 
-        this.events[event].push(fn);
+        this.events[event] = fn;
     }
 
     off(event, fn){
-        const handlerArray = this.events[event];
+        const handlerArr = this.evnets[event];
 
-        if(!handlerArray || handlerArray.length === 0){
-            return;
-        }
-
-        const index = handlerArray.indexOf(fn);
+        const index = handlerArr.indexof(fn);
 
         if(index !== -1){
-            handlerArray.splice(index, 1);
+            // 使用 splice 删除
+            handlerArr.splice(index, 1);
         }
     }
 
     emit(event, ...args){
-        const handlerArray = this.events[event];
+        const handlerArr = this.evnets[event];
 
-        if(handlerArray.length === 0 || !handlerArray){
-            return;
-        }
-
-        handlerArray.slice().forEach((fn) => {
+        handlerArr.slice().forEach((fn) => {
             fn.apply(this, args);
         })
     }

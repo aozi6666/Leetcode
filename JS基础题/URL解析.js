@@ -69,3 +69,42 @@ function parseUrl(url){
 
     return resObj;
 }
+
+function parseurl(url){
+    // 解题思路：使用字符串split做切割
+    const reslutObj = Object.create(null);
+
+    const targetPar = url.split('?');
+    const queryString = targetPar[1];
+
+    if(!queryString) return;
+
+    // 参数数组.[a=1, b=2]
+    const queryArr = queryString.split('&');
+
+    for(let item of queryArr){
+        const [key, rawValue] = item.split('=');
+
+        if(!rawValue){
+            value = true;
+        } else {
+            const value = encodeURIComponent(rawValue);
+        }
+
+        if(Object.prototype.hasOwnProperty.call(reslutObj, key)) {
+            const oldValue = reslutObj[key];
+
+
+            if(Array.isArray(oldValue)){
+                reslutObj[key].push(value);
+            } else {
+                reslutObj[key] = [oldValue, value];
+            }
+
+        } else {
+            reslutObj[key] = value;
+        }
+    }
+
+    
+}
