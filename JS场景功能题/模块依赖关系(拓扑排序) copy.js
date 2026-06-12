@@ -16,36 +16,38 @@ const dependencies = {
     moduleD: ["moduleA", "moduleB"]
   };
   
-function getLoadOrder(dependencies) {
-  // 结果数组
-  const result = [];
-  // 集合（带去重）：存在访问过的模块
+function getLoadOrder(dependencies){
   const visited = new Set();
+  const result = [];
 
+  // 遍历所有 模块，用 键名key 依次做 DFS 深度优先遍历
+  for(let moduleKey in dependencies){
+    dfs(moduleKey);
+  }
+
+  return result;
+
+  // 深度优先遍历函数：处理某个模块
+  // 参数: 为 模块名 （键名key）
   function dfs(module){
-    // 判断是否访问过
+    // 如果这个模块已经处理过了，就直接返回
     if(visited.has(module)){
       return;
     }
-    
-    // 没访问过就加入访问模块
+
+    // 将当前模块加入到 已处理模块集合
     visited.add(module);
 
-    // 拿 module 对应的value数组
+    // 拿到当前模块的依赖 数组
     const depsList = dependencies[module] || [];
 
-    // 遍历每个数组中的模块
+    // 先递归处理所有依赖模块
     for(let item of depsList){
       dfs(item);
     }
 
-    // 等所以模块处理完了，把自己放入结果中
+    // 等依赖都处理完后，再把自己放进结果
     result.push(module);
-  }
-
-  // 遍历 dependencies，拿到key
-  for(let module in dependencies){
-    dfs(module);
   }
 
 }
