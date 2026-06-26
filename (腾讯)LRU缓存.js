@@ -112,6 +112,7 @@ LRUCache.prototype.put = function(key, value) {
         return;
     }
 
+    
     // 先淘汰最久未使用的节点，避免链表瞬时超出容量
     if (this.map.size === this.capacity) {
         const leastUsedNode = this.tail.prev;
