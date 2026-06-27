@@ -38,9 +38,17 @@ var heapSort = function(nums) {
     // 下沉操作：保证当 前节点符合 大顶堆的性质
     // nums[i] 可能比它的孩子小，=> 需要把 nums[i] 向下调整到合适位置。(与最大孩子交换)
     function siftDown(i, heapSize){
+        // i 当前要下沉的 节点下标
+        // heapSize 堆的大小(后面需要不断缩小)
+
+
         // 循环
         while(true){
             let max = i;     // 先假设当前节点 i 是最大值
+
+            // 获取 左右孩子 下标
+            const left = 2 * i + 1;
+            const right = 2 * i + 2;
         }
     }
 
