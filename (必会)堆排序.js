@@ -42,7 +42,7 @@ var heapSort = function(nums) {
         // heapSize 堆的大小(后面需要不断缩小)
 
 
-        // 循环
+        // 循环（为了处理下沉多层）
         while(true){
             let max = i;     // 先假设当前节点 i 是最大值
 
