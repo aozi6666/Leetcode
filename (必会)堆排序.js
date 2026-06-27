@@ -35,6 +35,15 @@ var heapSort = function(nums) {
         nums[j] = temp;
     }
 
+    // 下沉操作：保证当 前节点符合 大顶堆的性质
+    // nums[i] 可能比它的孩子小，=> 需要把 nums[i] 向下调整到合适位置。(与最大孩子交换)
+    function siftDown(i, heapSize){
+        // 循环
+        while(true){
+            let max = i;     // 先假设当前节点 i 是最大值
+        }
+    }
+
     // 1. 建大顶堆：从最后一个 非叶子节点 开始,到 根节点
     // 叶子节点在数组中的范围 [Math.floor(n / 2), n - 1]
     for(let i = Math.floor(n / 2); i >= 0; i--){
