@@ -28,6 +28,13 @@ var heapSort = function(nums) {
     // 数组长度
     const n = nums.length;
 
+    // 交换数组
+    function swap(i, j){
+        const temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
     // 1. 建大顶堆：从最后一个 非叶子节点 开始,到 根节点
     // 叶子节点在数组中的范围 [Math.floor(n / 2), n - 1]
     for(let i = Math.floor(n / 2); i >= 0; i--){
