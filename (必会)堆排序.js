@@ -49,6 +49,16 @@ var heapSort = function(nums) {
             // 获取 左右孩子 下标
             const left = 2 * i + 1;
             const right = 2 * i + 2;
+
+            // 左孩子存在，左孩子比当前节点 值还大
+            if(left < heapSize && nums[left] > nums[max]){
+                max = left;
+            }
+
+            // 右孩子存在，右孩子比当前节点 值还大
+            if(right < heapSize && nums[right] > nums[max]){
+                max = right;
+            }
         }
     }
 
