@@ -11,7 +11,12 @@
  * @return {number}
  */
 var lengthOfLIS = function(nums) {
-    
+    // 解题思路： 动态规划
+    // 定义dp: dp[i] 表示 以 nums[i]为结尾的最长递增子序列的长度
+    // base case: dp[i] = 1, 因为以nums[i]为结尾的最长递增子序列长度至少为1
+    const dp = new Array(nums.length).fill(1);
+
+
 };
 // @lc code=end
 
