@@ -64,6 +64,12 @@ var heapSort = function(nums) {
             // 说明： 当前子树已经满足大顶堆性质，不需要继续调整
             if(max === i){
                 break;
+            } else {
+                // 需要交换 正确的节点
+                swap(i, max);
+                // 继续下沉(原来的 nums[i] 被换到了 max 位置)
+                // 可能还需要继续向下沉
+                i = max;
             }
         }
     }
