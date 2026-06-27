@@ -59,6 +59,12 @@ var heapSort = function(nums) {
             if(right < heapSize && nums[right] > nums[max]){
                 max = right;
             }
+
+            // 如果 max 没有被交换
+            // 说明： 当前子树已经满足大顶堆性质，不需要继续调整
+            if(max === i){
+                break;
+            }
         }
     }
 
