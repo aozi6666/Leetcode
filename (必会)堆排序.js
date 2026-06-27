@@ -28,8 +28,22 @@ var heapSort = function(nums) {
     // 数组长度
     const n = nums.length;
 
-    // 建大顶堆：从最后一个 非叶子节点 开始
+    // 1. 建大顶堆：从最后一个 非叶子节点 开始,到 根节点
+    // 叶子节点在数组中的范围 [Math.floor(n / 2), n - 1]
     for(let i = Math.floor(n / 2); i >= 0; i--){
-        
+        // 下沉操作（保证这个节点符合 大顶堆的性质）
+        siftDown(i, n);
     }
+
+    // 2. 重复，把 堆顶最大值放到数组末尾 
+    //  缩小堆的范围，对 堆顶做下沉调整
+    for(let j = n - 1; j > 0; j--){
+        // 交换 最大值和 最后一个元素
+        swap(0, j);
+
+        // 缩小堆的范围,对换到堆顶的元素 做 下沉调整
+        siftDown(0, j);
+    }
+
+    return nums;
 }
