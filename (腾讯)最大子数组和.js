@@ -11,6 +11,7 @@
  * 没告诉你：这个最大子数组是不是以 nums[i] 结尾
  * 
  * =》 对于“连续子数组”来说，能不能接上 nums[i+1]，取决于它是不是贴着右边界 nums[i]
+ * ✅ dp[i] = 以 nums[i] 结尾的 最大子数组和
  */
 
 // @lc code=start
@@ -19,19 +20,25 @@
  * @return {number}
  */
 var maxSubArray = function(nums) {
-    // dp[i] 表示 以 nums[i] 结尾的最大子数组和
-    let dp = new Array(nums.length);
+  // 解题思路：动态规划（dp定义要注意）
+  if(nums.length === 0) return 0;
 
-    dp[0] = nums[0];
+  // dp[i] : 表示 以 nums[i] 为结尾的 最大子数组和
+  const dp = new Array(nums.length);
+  dp[0] = nums[0];
+  
+  let result = -Infinity;
 
-    let result;
+  for(let i = 1; i < nums.length; i++){
+    // 转移状态矩阵：要不从nums[i]重开，要不从 nums[i-1] 接上
+    dp[i] = Math.max(nums[i], dp[i - 1] + nums[i]);
+  }
 
-    for(let i = 1; i < nums.length; i++){
-        dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
-    }
+  for(let i = 0; i < dp.length; i++){
+    result = Math.max(result. dp[i]);
+  }
 
-    result = Math.max(...dp);
-    return result;
+  return result;
 };
 // @lc code=end
 
