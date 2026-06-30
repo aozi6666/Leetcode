@@ -27,6 +27,9 @@ var numIslands = function(grid) {
         if(grid[i][j] === '0'){
             return;
         }
+
+        // 标记 该元素为访问
+        grid[i][j] = '0';
     }
 
     // 双层循环-遍历每个元素
