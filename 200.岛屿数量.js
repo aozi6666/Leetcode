@@ -30,13 +30,23 @@ var numIslands = function(grid) {
 
         // 标记 该元素为访问
         grid[i][j] = '0';
+
+        // 递归（四周）
+        dfs(i - 1, j);
+        dfs(i + 1, j);
+        dfs(i, j - 1);
+        dfs(i, j + 1);
     }
 
     // 双层循环-遍历每个元素
     for(let i = 0; i < m; i++){
         for(let j = 0; j < n; j++){
-            count++;
-            dfs(i, j);
+            if(grid[i][j] === '1'){
+                // 岛屿数量+1
+                count++;
+                // 递归
+                dfs(i, j);
+            }
         }
     }
 
