@@ -22,6 +22,11 @@ var numIslands = function(grid) {
         if(i < 0 || i >= m || j < 0 || j >= n){
             return;
         }
+
+        // 该元素访问过，直接跳过
+        if(grid[i][j] === '0'){
+            return;
+        }
     }
 
     // 双层循环-遍历每个元素
