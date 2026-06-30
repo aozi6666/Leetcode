@@ -11,7 +11,11 @@
  * @return {number}
  */
 var numIslands = function(grid) {
-    
+    // 解题思路：DFS + 沉0
+    const m = grid.length;
+    const n = grid[0].length;
+
+    let count = 0;
 };
 // @lc code=end
 
