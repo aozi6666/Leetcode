@@ -17,6 +17,13 @@ var numIslands = function(grid) {
 
     let count = 0;
 
+    function dfs(i, j){
+        // 超出边界：跳过
+        if(i < 0 || i >= m || j < 0 || j >= n){
+            
+        }
+    }
+
     // 双层循环-遍历每个元素
     for(let i = 0; i < m; i++){
         for(let j = 0; j < n; j++){
