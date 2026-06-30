@@ -20,9 +20,12 @@ var numIslands = function(grid) {
     // 双层循环-遍历每个元素
     for(let i = 0; i < m; i++){
         for(let j = 0; j < n; j++){
-            
+            count++;
+            dfs(i, j);
         }
     }
+
+    return count;
 };
 // @lc code=end
 
