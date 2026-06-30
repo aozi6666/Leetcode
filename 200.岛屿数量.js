@@ -20,7 +20,7 @@ var numIslands = function(grid) {
     function dfs(i, j){
         // 超出边界：跳过
         if(i < 0 || i >= m || j < 0 || j >= n){
-            
+            return;
         }
     }
 
