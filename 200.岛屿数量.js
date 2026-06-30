@@ -16,6 +16,13 @@ var numIslands = function(grid) {
     const n = grid[0].length;
 
     let count = 0;
+
+    // 双层循环-遍历每个元素
+    for(let i = 0; i < m; i++){
+        for(let j = 0; j < n; j++){
+            
+        }
+    }
 };
 // @lc code=end
 
