@@ -14,7 +14,6 @@ var numIslands = function(grid) {
     // 解题思路：DFS + 沉0
     const m = grid.length;
     const n = grid[0].length;
-
     // 结果
     let count = 0;
 
