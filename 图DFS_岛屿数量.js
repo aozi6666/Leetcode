@@ -15,6 +15,7 @@ var numIslands = function(grid) {
     const m = grid.length;
     const n = grid[0].length;
 
+    // 结果
     let count = 0;
 
     function dfs(i, j){
