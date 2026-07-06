@@ -16,6 +16,7 @@ var numIslands = function(grid) {
     const n = grid[0].length;
     // 结果
     let count = 0;
+    
 
     function dfs(i, j){
         // 超出边界：跳过
