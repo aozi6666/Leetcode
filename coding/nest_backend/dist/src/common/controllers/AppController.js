@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const common_2 = require("@nestjs/common");
 const AppService_1 = require("../services/AppService");
 const jwt_auth_guard_1 = require("../guards/jwt-auth.guard");
+const app_interceptor_1 = require("../interceptors/app.interceptor");
 let AppController = class AppController {
     appService;
     constructor(appService) {
@@ -29,6 +30,7 @@ let AppController = class AppController {
 exports.AppController = AppController;
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, common_1.UseInterceptors)(app_interceptor_1.AppInterceptor),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
@@ -37,6 +39,7 @@ __decorate([
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)('apps'),
     (0, common_2.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    useInterceptors(app_interceptor_1.AppInterceptor),
     __metadata("design:paramtypes", [AppService_1.AppService])
 ], AppController);
 //# sourceMappingURL=AppController.js.map
