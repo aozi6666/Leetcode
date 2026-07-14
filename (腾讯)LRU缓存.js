@@ -120,7 +120,6 @@ LRUCache.prototype.put = function(key, value) {
         this.map.delete(leastUsedNode.key);
     }
 
-    
     const newNode = new ListNode(key, value);
 
     this.map.set(key, newNode);
