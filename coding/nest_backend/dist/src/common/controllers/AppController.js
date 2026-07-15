@@ -39,7 +39,7 @@ __decorate([
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)('apps'),
     (0, common_2.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    useInterceptors(app_interceptor_1.AppInterceptor),
+    (0, common_1.UseInterceptors)(app_interceptor_1.AppInterceptor),
     __metadata("design:paramtypes", [AppService_1.AppService])
 ], AppController);
 //# sourceMappingURL=AppController.js.map

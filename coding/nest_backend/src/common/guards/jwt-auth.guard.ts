@@ -25,8 +25,8 @@ export class JwtAuthGuard implements CanActivate{
         try {
             // 通过 NestJS 官方 JWT 模块提供的服务（得到 token 里面存的 payload 对象）
             const payload = await this.JwtService.verifyAsync(token, { secret: process.env.JWT_SECRET });
-
-            request.user = payload; // 将 payload 存入 request 对象中，方便后续使用
+            // 将 payload 存入 request 对象中，方便后续使用
+            request.user = payload; 
         } catch (error) {
             throw new Error('Invalid token');
         }
