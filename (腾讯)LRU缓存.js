@@ -122,7 +122,6 @@ LRUCache.prototype.put = function(key, value) {
 
     const newNode = new ListNode(key, value);
 
-    
     this.map.set(key, newNode);
     this.addToHead(newNode);
 };
