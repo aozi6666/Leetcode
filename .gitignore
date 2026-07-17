@@ -1,3 +1,6 @@
 # 忽略 node_modules 目录
 coding/nest_backend/node_modules/node_modules/
 coding/nest_backend/node_modules/
+coding/agent/node_modules/
+coding/agent/**/node_modules/
+**/node_modules/
