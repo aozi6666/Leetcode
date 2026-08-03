@@ -4,3 +4,5 @@ coding/nest_backend/node_modules/
 coding/agent/node_modules/
 coding/agent/**/node_modules/
 **/node_modules/
+
+node_modules/
