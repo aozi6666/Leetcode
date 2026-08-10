@@ -52,34 +52,12 @@ Function.prototype.myCall = function (context, ...args) {
     return result;
   };
   
-  const obj = {
-    name: "Tom",
-  };
+const obj = {
+  name: "Tom",
+};
   
-  function sayHi(age) {
-    console.log(this.name, age);
-  }
-  
-  sayHi.myCall(obj, 20, "Shanghai");
-
-
-Function.prototype.myCall = function(context, ...args){
-  // 初始化对象
-  context = context == null ? window : Object(context);
-  // 拿到 原函数
-  const fn = this;
-
-  // 创建唯一的key
-  const key = new Symbol('fn');
-
-  // 挂到对象方法上
-  context[key] = fn;
-
-  // 执行
-  const result =  context[key](...args);
-
-  // 删除方法
-  delete context[key];
-
-  return result;
+function sayHi(age) {
+  console.log(this.name, age);
 }
+
+sayHi.myCall(obj, 20, "Shanghai");

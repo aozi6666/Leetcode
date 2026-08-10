@@ -29,6 +29,7 @@ function getLoadOrder(dependencies) {
       // 如果这个模块已经处理过了，就直接返回
       if (visited.has(module)) {
         return;
+      }
   
       // 标记当前模块已经访问过
       visited.add(module);
@@ -59,4 +60,3 @@ function getLoadOrder(dependencies) {
 }
 
 console.log(getLoadOrder(dependencies)); // 输出: ["moduleC", "moduleB", "moduleA", "moduleD"]
-  

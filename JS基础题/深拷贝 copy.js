@@ -52,14 +52,13 @@ function deepClone(target, map = new WeakMap()) {
     return map.get(target);
   }
 
-  // 3. 
   const cloneTarget = Array.isArray(target) ? [] : {};
 
   map.set(target, cloneTarget);
 
   //  
   for(let key in target){
-    if(Object.hasOwnPrototype.call(key, target)){
+    if(Object.hasOwnProperty.call(target, key)){
       // 递归
       cloneTarget[key] = deepClone(target[key], map);
     }
