@@ -41,7 +41,30 @@
 */
 
 // 参数：target 是旧对象/旧数组
+function deepClone(target, map = new Map()){
+  // 基础数据类型直接返回
+  if(target == null || typeof target !== 'object'){
+    return target;
+  }
 
+  if(map.has(target)){
+    return map.get(target);
+  }
+
+  const newTarget = Array.isArray(target) ? [] : {};
+
+  map.set(target, newTarget);
+
+  // 循环
+  for(let key in target){
+    if(Object.prototype.hasOwnProperty.call(target, key)){
+      // 递归
+      newTarget[key] = deepClone(target[key], map);
+    }
+  }
+
+  return newTarget;
+}
 
 
 /**
