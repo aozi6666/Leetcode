@@ -23,35 +23,34 @@ function getLoadOrder(dependencies){
   const visited = new Set();
   const result = [];
 
-  // DFS遍历函数（处理模块）
   function dfs(module){
-    // 重要：处理过了直接返回
+
+    // 访问过，直接返回
     if(visited.has(module)){
       return;
     }
 
-    // 每次处理前，先标记已经访问过了
+    // 标记访问过
     visited.add(module);
 
-    // 拿到 key 依赖的 数组
-    const desList = dependencies[module] || [];
+    // 取出 moudle 对应的数组
+    const dependList = dependencies[module] || [];
 
-    // 递归处理。依赖数组中的 模块
-    for(const item of desList){
+    // 循环遍历数组
+    for(let item of dependList){
       dfs(item);
     }
 
-    // 等所有依赖处理完，将本身加入到 结果
+    // 将当前模块加入结果
     result.push(module);
+
   }
 
-  // 遍历所有模块，依次传入
-  // for...in ：拿到的是键名key
-  for(const module in dependencies){
-    // 调用
+  // 递归：用模块名key传入
+  for(let module in dependencies){
     dfs(module);
   }
-
+  
   return result;
 }
 
