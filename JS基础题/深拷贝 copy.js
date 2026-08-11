@@ -41,33 +41,6 @@
 */
 
 // 参数：target 是旧对象/旧数组
-function deepClone(target, map = new WeakMap()) {
-  // 1. 基本类型直接返回
-  if(typeof target !== 'object' || target === null){
-    return target;
-  }
-
-  // 2. 判断 map 中是否有（解决循环引用）
-  if(map.has(target)){
-    return map.get(target);
-  }
-
-  const cloneTarget = Array.isArray(target) ? [] : {};
-
-  map.set(target, cloneTarget);
-
-  //  
-  for(let key in target){
-    if(Object.hasOwnProperty.call(target, key)){
-      // 递归
-      cloneTarget[key] = deepClone(target[key], map);
-    }
-  }
-
-  return cloneTarget;
-
-}
-
 
 
 
@@ -84,27 +57,27 @@ const obj = {
     },
   };
   
-  const newObj = deepClone(obj);
-  
-  newObj.name = "Jerry";
-  newObj.hobby.push("跑步");
-  newObj.info.city = "北京";
-  
-  console.log(obj);
-  // {
-  //   name: "Tom",
-  //   age: 20,
-  //   hobby: ["篮球", "游戏"],
-  //   info: { city: "上海" }
-  // }
-  
-  console.log(newObj);
-  // {
-  //   name: "Jerry",
-  //   age: 20,
-  //   hobby: ["篮球", "游戏", "跑步"],
-  //   info: { city: "北京" }
-  // }
+const newObj = deepClone(obj);
+
+newObj.name = "Jerry";
+newObj.hobby.push("跑步");
+newObj.info.city = "北京";
+
+console.log(obj);
+// {
+//   name: "Tom",
+//   age: 20,
+//   hobby: ["篮球", "游戏"],
+//   info: { city: "上海" }
+// }
+
+console.log(newObj);
+// {
+//   name: "Jerry",
+//   age: 20,
+//   hobby: ["篮球", "游戏", "跑步"],
+//   info: { city: "北京" }
+// }
 
 //   使用例子 2：数组嵌套对象
 const arr = [1, 2, { a: 10, b: [100, 200] }];
@@ -122,16 +95,16 @@ console.log(newArr);
 
 // 使用例子 3：循环引用
 const obj3 = {
-    name: "Tom",
-  };
-  
-  obj.self = obj3;
-  
-  const newObj = deepClone(obj3);
-  
-  console.log(newObj);
-  // { name: "Tom", self: [Circular] }
-  
-  console.log(newObj.self === newObj); 
+  name: "Tom",
+};
+
+obj.self = obj3;
+
+const newObj = deepClone(obj3);
+
+console.log(newObj);
+// { name: "Tom", self: [Circular] }
+
+console.log(newObj.self === newObj); 
   // true
   
