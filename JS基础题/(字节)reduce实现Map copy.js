@@ -24,9 +24,13 @@
 
 const { attenuationColor } = require("three/tsl");
 
-function myMap(arr, fn, thisArg){
-    return arr.reduce(function(acc, cur, index, arr){
-        acc.push[fn.call(thisArg, cur, index, array)];
+// map的使用：[].map(() => {})
+// reduce的使用 Array.reduce((acc, cur, index, arr) => {return acc}, [])
+
+
+function myMap(arr, fn, args){
+    return arr.reduce((acc, cur, index, arr) => {
+        acc.push[fn.call(args, cur, index, arr)];
         return acc;
-    }, []);
+    }, [])
 }
