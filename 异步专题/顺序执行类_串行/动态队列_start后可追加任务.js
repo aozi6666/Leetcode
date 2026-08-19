@@ -2,7 +2,6 @@
 // 添加任务后，如果当前没人执行，就自动开始执行
 // 执行过程中，还可以继续加任务
 
-
 class DynamicQueue {
     constructor(){
         this.queue = [];
