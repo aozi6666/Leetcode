@@ -1,0 +1,47 @@
+name: Daily auto push
+
+# 每天在 autoPushing/<日期>/ 下生成 5 个 .js 文件，并分别 commit + push（5 次推送）。
+# 与电脑上的 launchd 任务共用同一个脚本 autoPushing/auto-push.sh，
+# 两边都按“当天日期文件夹是否已存在”去重，所以每天最多只会有 5 次推送。
+
+on:
+  schedule:
+    # 每天 09:30（Asia/Shanghai）= 01:30 UTC
+    # 注意：GitHub 的定时任务只有 UTC cron，且高峰期可能延迟几分钟到十几分钟。
+    - cron: '30 1 * * *'
+  # 允许在 Actions 页面手动点 “Run workflow” 立即跑一次（今天已完成会自动跳过）
+  workflow_dispatch:
+
+# 用仓库自带的 GITHUB_TOKEN 推送，需要写权限
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-auto-push
+  cancel-in-progress: false
+
+jobs:
+  auto-push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TZ: Asia/Shanghai
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure on main branch
+        run: git checkout -B main "origin/main"
+
+      - name: Configure git identity
+        run: |
+          git config user.name "zhangAo"
+          git config user.email "2212433186@qq.com"
+
+      - name: Create 5 commits and push
+        env:
+          LEETCODE_REPO: ${{ github.workspace }}
+          LEETCODE_BRANCH: main
+        run: bash autoPushing/auto-push.sh --no-wait
