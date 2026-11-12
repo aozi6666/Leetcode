@@ -9,8 +9,6 @@ on:
     # 每天 09:30（Asia/Shanghai）= 01:30 UTC
     # 注意：GitHub 的定时任务只有 UTC cron，且高峰期可能延迟几分钟到十几分钟。
     - cron: '30 1 * * *'
-    # TEMP-VERIFY: 一次性验证用，验证完删除
-    - cron: '*/5 * * * *'
   # 允许在 Actions 页面手动点 “Run workflow” 立即跑一次（今天已完成会自动跳过）
   workflow_dispatch:
 
