@@ -63,3 +63,14 @@ launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.zhangao.leetcode-aut
 - 云端用的是仓库自带的 `GITHUB_TOKEN`（workflow 里已声明 `contents: write`）。
   如果希望提交在 GitHub 上明确算作你的 contribution，可在 Settings → Actions → General
   确认 Workflow permissions 为 “Read and write permissions”。
+
+## 本机任务需要的系统权限（一次性）
+
+macOS 的「桌面文件夹保护」会拦截后台进程读写 `~/Desktop`，表现为日志里出现
+`/bin/bash: ... Operation not permitted`。解决办法是给 bash 开启「完全磁盘访问权限」：
+
+1. 系统设置 → 隐私与安全性 → **完全磁盘访问权限**
+2. 把 `bash` 打开（如果没有：Finder → `Cmd+Shift+G` → 输入 `/bin` → 把 `bash` 拖进列表）
+3. 开关置为蓝色即可，不需要重启
+
+> 如果换了电脑或重置了权限，重复上面步骤即可。
